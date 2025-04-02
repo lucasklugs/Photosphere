@@ -104,6 +104,15 @@ body {
     text-decoration: underline;
 }
 
+.texto-hover span {
+    font-size: 12px;
+    transition: font-size 0.3s ease;
+}
+
+.texto-hover span:hover {
+    font-size: 13px; 
+}
+
 .form-container {
     position: absolute;
     top: 0;
