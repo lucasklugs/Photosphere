@@ -14,7 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Página de login
-app.get('/login', (req, res) => {
+app.get('/', (req, res) => {
     res.render('login');
 });
 
@@ -75,7 +75,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Iniciar servidor
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });

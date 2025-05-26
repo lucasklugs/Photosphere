@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok) {
         // Redirecionar para página principal
-        window.location.href = '/dashboard';
+        window.location.href = '/explorar';
       } else {
         alert('⚠️ Erro: ' + text);
       }
