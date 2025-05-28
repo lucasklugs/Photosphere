@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= user.username %> | Perfil</title>
+  <link rel="stylesheet" href="/styles/perfil.css" />
+</head>
+<body>
+  <header class="cover">
+    <img
+      src="<%= user.cover || '/images/placeholder-cover.jpg' %>"
+      alt="Capa do usuário"
+      id="cover-img"
+      aria-label="Imagem de capa do usuário"
+    />
+  </header>
+
+  <section class="profile" role="region" aria-label="Informações do perfil do usuário">
+    <div class="avatar-wrapper">
+      <img
+        src="<%= user.avatar || '/images/placeholder-avatar.png' %>"
+        alt="Avatar de <%= user.username %>"
+        class="avatar"
+        id="avatar-img"
+      />
+    </div>
+    <h1><%= user.username %></h1>
+    <p class="handle">@<%= user.handle %></p>
+    <p class="stats"><%= user.followers %> seguidores · <%= user.saves %> salvamentos</p>
+
+    <div class="buttons">
+      <button class="follow" aria-label="Ver seguidores">Seguidores</button>
+      <button class="menu" aria-label="Abrir menu de opções">...</button>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Abas do perfil">
+      <button
+        class="active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="pins-criados"
+        id="tab-criados"
+        tabindex="0"
+      >
+        Criados
+      </button>
+      <button
+        role="tab"
+        aria-selected="false"
+        aria-controls="pins-favoritos"
+        id="tab-favoritos"
+        tabindex="-1"
+      >
+        Favoritos
+      </button>
+    </div>
+  </section>
+
+  <main>
+    <div
+      class="grid"
+      id="pins-criados"
+      role="tabpanel"
+      aria-labelledby="tab-criados"
+    >
+      <% pins.forEach(pin => { %>
+        <div class="pin">
+          <img
+            src="<%= pin.imageUrl %>"
+            alt="Pin: <%= pin.title %>"
+            tabindex="0"
+            data-title="<%= pin.title %>"
+          />
+        </div>
+      <% }) %>
+    </div>
+
+    <div
+      class="grid"
+      id="pins-favoritos"
+      role="tabpanel"
+      aria-labelledby="tab-favoritos"
+      hidden
+    >
+      <% favoritos.forEach(pin => { %>
+        <div class="pin">
+          <img
+            src="<%= pin.imageUrl %>"
+            alt="Pin favorito: <%= pin.title %>"
+            tabindex="0"
+            data-title="<%= pin.title %>"
+          />
+        </div>
+      <% }) %>
+    </div>
+  </main>
+  <button id="btn-top" aria-label="Voltar ao topo" title="Voltar ao topo">↑</button>
+
+  <!-- Modal para imagem ampliada -->
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+  <div class="modal-content">
+    <button id="modal-close" aria-label="Fechar imagem ampliada">×</button>
+    <img id="modal-img" alt="" />
+    <p id="modal-title"></p>
+  </div>
+</div>
+  <script src="/javascripts/perfil.js"></script>
+</body>
+</html>
