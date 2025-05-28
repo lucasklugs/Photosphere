@@ -5,7 +5,10 @@
     <title>Photosphere</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="/styles/explorar.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,600|Inter:700" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,600|Inter:700"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
@@ -13,11 +16,13 @@
       <header class="header">
         <nav class="nav">
           <div class="logo"></div>
-          <div class="nav-item">Home</div>
-          <button class="btn btn-primary">Explorar</button>
-          <div class="nav-item-with-icon">
-            Criar
-            <span class="chevron-down"></span>
+          <button class="hamburger" aria-label="Toggle menu">☰</button>
+          <div class="nav-menu">
+            <div class="nav-item">Home</div>
+            <button class="btn btn-primary">Explorar</button>
+            <div class="nav-item-with-icon">
+              Criar <span class="chevron-down"></span>
+            </div>
           </div>
           <div class="search-bar">
             <span class="search-icon"></span>
@@ -38,69 +43,46 @@
         </div>
 
         <div class="photo-grid">
+          <% for(let i = 0; i < 6; i++) { %>
           <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/0ec5e7faa04f210fdd6c8970819badcf-jpg.png')">
+            <div
+              class="photo-content"
+              style="background-image: url('/images/gato.jpg')"
+            >
               <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
+                <img class="user-icon" src="/images/account_padrao.jpg" alt="User" />
               </div>
             </div>
           </div>
-          <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/2f16185dfb4341ed6ef791b87e1385fa-jpg.png')">
-              <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
-              </div>
-            </div>
-          </div>
-          <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/3265f80d4e22db237f14b4e686d51a80-jpg.png')">
-              <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
-              </div>
-            </div>
-          </div>
-          <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/67591951e89ebf3c9486f83c251108bd-jpg.png')">
-              <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
-              </div>
-            </div>
-          </div>
-          <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/718aebd921f2623523f1432c42c13bf3-jpg.png')">
-              <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
-              </div>
-            </div>
-          </div>
-          <div class="photo-card">
-            <div class="photo-content" style="background-image: url('/133f131bf27426dfde1d7ca2332fa039-jpg.png')">
-              <div class="overlay">
-                <img class="user-icon" src="/image-3-3.png" alt="User" />
-              </div>
-            </div>
-          </div>
+          <% } %>
         </div>
       </main>
 
       <!-- Back to Top -->
       <div class="back-to-top">
-        <img src="/frame.svg" alt="Back to top" />
+        <img src="/images/frame.svg" alt="Back to top" />
         <button class="btn btn-secondary">Voltar ao início</button>
       </div>
 
       <!-- Footer -->
       <footer class="footer">
-        <div class="footer-content">
-          <div class="footer-brand">Photosphere.com</div>
-          <div class="footer-links">
-            Home&nbsp;&nbsp;&nbsp;&nbsp; Explorar&nbsp;&nbsp;&nbsp;&nbsp; Criar&nbsp;&nbsp;&nbsp;&nbsp; Contato
-          </div>
-        </div>
-        <div class="footer-bar"></div>
-      </footer>
+  <div class="footer-content">
+    <div class="footer-brand">Photosphere.com</div>
+    <div class="footer-links">
+      <button class="footer-btn">Home</button>
+      <button class="footer-btn">Explorar</button>
+      <button class="footer-btn">Criar</button>
+      <button class="footer-btn">Contato</button>
     </div>
+  </div>
+  <div class="footer-bar"></div>
+</footer>
 
-    <script src="/javascripts/explorar.js"></script>
+
+    <script>
+      document.querySelector(".hamburger").addEventListener("click", () => {
+        document.querySelector(".nav-menu").classList.toggle("active");
+      });
+    </script>
   </body>
 </html>
