@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "stop": "npx kill-port 3000",
     "lint": "eslint .",
-    "dev": "nodemon photosphere.js",
+    "dev": "nodemon ./bin/www",
     "test": "jest --coverage"
   },
   "dependencies": {
