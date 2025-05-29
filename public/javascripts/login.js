@@ -88,3 +88,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const registerForm = document.getElementById("registerForm");
+  const container = document.getElementById("container");
+
+  // Quando o formulário de cadastro é enviado
+  registerForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // se você ainda não estiver enviando para back-end
+
+    // Lógica de cadastro (API, etc.)
+
+    registerForm.reset(); // limpa os campos
+    container.classList.remove("right-panel-active"); // troca para o login
+  });
+
+  // Troca para tela de login e limpa o formulário de cadastro
+  document.getElementById("login").addEventListener("click", () => {
+    container.classList.remove("right-panel-active");
+    registerForm.reset(); // limpa os campos quando apenas troca de aba
+  });
+
+  // Troca para tela de cadastro
+  document.getElementById("register").addEventListener("click", () => {
+    container.classList.add("right-panel-active");
+  });
+});
+

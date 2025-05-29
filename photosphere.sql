@@ -9,7 +9,7 @@ CREATE TABLE usuarios (
     senha_hash VARCHAR(255) NOT NULL,
     foto_perfil VARCHAR(255),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+);  
 
 -- Tabela de Fotos
 CREATE TABLE fotos (
