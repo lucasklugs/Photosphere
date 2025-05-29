@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748218092697" clover="3.2.0">
-  <project timestamp="1748218092697" name="All files">
+<coverage generated="1748546220808" clover="3.2.0">
+  <project timestamp="1748546220808" name="All files">
     <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2" elements="21" coveredelements="21" complexity="0" loc="13" ncloc="13" packages="1" files="1" classes="1"/>
     <file name="auth.js" path="C:\Projetos\Photosphere\auth.js">
       <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
