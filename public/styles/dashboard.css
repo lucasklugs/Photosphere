@@ -5,6 +5,12 @@ body {
   color: #fff;
 }
 
+main {
+  padding: 7rem 1rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .navbar {
   background-color: #1a1a1a;
   color: white;
@@ -44,11 +50,7 @@ body {
   color: #007BFF;
 }
 
-main {
-  padding: 7rem 1rem 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
+
 
 .dashboard {
   background-color: #1c1c1c;
@@ -88,6 +90,33 @@ main {
 
 .delete-btn:hover {
   color: #ff5c57;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #1c1c1c;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin: 0 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

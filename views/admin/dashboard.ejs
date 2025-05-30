@@ -7,11 +7,29 @@
   <link href="https://fonts.googleapis.com/css2?family=monoton&display=swap" rel="stylesheet">
   <link href="/styles/dashboard.css" rel="stylesheet" />
 </head>
+
+<!-- JS do Modal -->
+<script>
+  function abrirModal(userId, userName) {
+    const modal = document.getElementById('modalConfirmacao');
+    const texto = document.getElementById('textoModal');
+    const form = document.getElementById('formExcluir');
+
+    texto.textContent = `Tem certeza que deseja excluir o usuário "${userName}"?`;
+    form.action = `/admin/usuarios/excluir/${userId}`;
+    modal.style.display = 'flex';
+  }
+
+  function fecharModal() {
+    document.getElementById('modalConfirmacao').style.display = 'none';
+  }
+</script>
+
 <body>
   <header class="navbar">
     <div class="header-container">
       <h1>Dashboard do Administrador</h1>
-      <p class="admin-nome">Bem-vindo, <strong><%= admNome %></strong></p>
+      <p class="admin-nome">Bem-vindo, <%= admNome %></p>
       <nav class="menu-centralizado">
         <ul>
           <li><a href="/admin/dashboard">Usuários</a></li>
@@ -45,13 +63,26 @@
                   <option <%= user.tipo === 'Usuário' ? 'selected' : '' %>>Usuário</option>
                 </select>
               </td>
-              <td><button class="delete-btn">Excluir</button></td>
+              <td>
+                <button type="button" class="delete-btn" onclick="abrirModal('<%= user.id %>', '<%= user.nome %>')">Excluir</button>
+              </td>
             </tr>
           <% }); %>
         </tbody>
       </table>
     </section>
   </main>
+
+  <!-- Modal de confirmação -->
+  <div id="modalConfirmacao" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p id="textoModal"></p>
+      <form id="formExcluir" method="POST">
+        <button type="button" onclick="fecharModal()">Cancelar</button>
+        <button type="submit">Confirmar</button>
+      </form>
+    </div>
+  </div>
 
 </body>
 </html>

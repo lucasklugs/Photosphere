@@ -33,10 +33,17 @@ async function buscarAdmin(usuario) {
     }
 }
 
+//Função buscarUsarios
 async function buscarUsuarios() {
   const [rows] = await pool.query("SELECT id, nome, email, 'Usuário' AS tipo FROM usuarios;");
   return rows;
 }
 
-module.exports = { pool, buscarAdmin, buscarUsuarios };
+//Função excluirUsuario
+async function excluirUsuario(id) {
+  const sql = 'DELETE FROM usuarios WHERE id = ?';
+  await pool.query(sql, [id]);
+}
+
+module.exports = { pool, buscarAdmin, buscarUsuarios, excluirUsuario };
 

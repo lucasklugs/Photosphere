@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin` (
+  `admcodigo` int(11) NOT NULL AUTO_INCREMENT,
+  `admemail` char(50) NOT NULL,
+  `admsenha` char(15) NOT NULL,
+  `admnome` char(20) DEFAULT NULL,
+  PRIMARY KEY (`admcodigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1,'matheus@gmail.com','123','Matheus'),(2,'kaua@gmail.com','123','Kau?'),(3,'lucas@gmail.com','123','Lucas');
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categorias`
 --
 
@@ -210,7 +236,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(2,'Zezinho','zezinho@gmail.com','$2b$10$r3ex0I60at7qsZ8k7rlgbuDT1EfEcIwaVzjqDculB2NdgqHolb9uW',NULL, NULL,'2025-05-25 23:46:51'),(3,'Luis','luis@gmail.com','$2b$10$nUxtGTY6fkOmrVqMbcCt5ufrc1DV1Uk62XubwRjIvXym3UuNiucNu',NULL,NULL,'2025-05-29 18:44:05');
+INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(2,'Zezinho','zezinho@gmail.com','$2b$10$r3ex0I60at7qsZ8k7rlgbuDT1EfEcIwaVzjqDculB2NdgqHolb9uW',NULL,NULL,'2025-05-25 23:46:51');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -223,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-29 22:01:50
+-- Dump completed on 2025-05-30 17:40:11
