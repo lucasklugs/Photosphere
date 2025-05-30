@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
-const connection = require('../db');
+const { pool } = require('../db');
 
 //ROTAS GET
 
@@ -53,13 +53,13 @@ router.post('/register', async (req, res) => {
       return res.status(400).send('Todos os campos são obrigatórios!');
     }
 
-    const [rows] = await connection.execute("SELECT email FROM usuarios WHERE email = ?", [email]);
+    const [rows] = await pool.execute("SELECT email FROM usuarios WHERE email = ?", [email]);
     if (rows.length > 0) {
       return res.status(409).send('E-mail já cadastrado!');
     }
 
     const senhaHash = await bcrypt.hash(senha, 10);
-    await connection.execute(
+    await pool.execute(
       'INSERT INTO usuarios (nome, email, senha_hash, foto_perfil) VALUES (?, ?, ?, ?)',
       [nome, email, senhaHash, foto_perfil || null]
     );
@@ -75,7 +75,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, senha } = req.body;
-    const [results] = await connection.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
+    const [results] = await pool.execute('SELECT * FROM usuarios WHERE email = ?', [email]);
 
     if (results.length === 0) {
       return res.status(401).send('Usuário não encontrado');
@@ -95,5 +95,8 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Erro no login');
   }
 });
+
+//Função global de verificação de login
+
 
 module.exports = router;
