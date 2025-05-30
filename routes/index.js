@@ -42,6 +42,53 @@ router.get('/perfil', function(req, res, next) {
   res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
 });
 
+// Página criar.ejs
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: 'public/uploads',
+  filename: (req, file, cb) => {
+    const nomeArquivo = Date.now() + path.extname(file.originalname);
+    cb(null, nomeArquivo);
+  }
+});
+const upload = multer({ storage });
+
+router.get('/criar', function(req, res, next) {
+  const user = {
+    username: 'teste',
+    avatar: '/images/placeholder-avatar.png'
+  };
+
+  res.render('criar', { title: 'Página - Criar', user });
+});
+
+router.post('/upload', upload.single('imagem'), (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
+
+  res.send('✅ Upload concluído com sucesso!');
+});
+
+// página pin
+router.get('/pin/:id', async (req, res) => {
+  const pinId = req.params.id;
+
+  const pin = {
+    id: pinId,
+    titulo: 'Cachorro com Pizza',
+    imagemUrl: '/uploads/cachorro-pizza.png'
+  };
+
+  const comentarios = [
+    { nome: 'João da Silva', texto: 'Muito fofo!' },
+    { nome: 'Maria', texto: 'Amei essa imagem 🐶🍕' }
+  ];
+
+  res.render('pin', { pin, comentarios });
+});
+
 //ROTAS POST
 
 // Cadastro de usuário

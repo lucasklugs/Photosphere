@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pin.titulo %> | Photosphere</title>
+  <link rel="stylesheet" href="/styles/pin.css" />
+  <link rel="stylesheet" href="/styles/nav-footer.css" />
+</head>
+<body>
+<%- include('partials/navbar') %>
+
+<main class="pin-container">
+  <a href="/explorar" class="voltar-btn">←</a>
+
+  <div class="pin-left">
+    <img src="<%= pin.imagemUrl %>" alt="<%= pin.titulo %>" class="pin-img" />
+    <button class="like-btn">♡</button>
+  </div>
+
+  <div class="pin-right">
+    <div class="comentario-header">
+      <div class="avatar-circle">J</div>
+      <span class="username">João da Silva</span>
+    </div>
+
+    <div class="comentarios">
+      <% comentarios.forEach(c => { %>
+        <div class="comentario-item">
+          <strong><%= c.nome %>:</strong> <%= c.texto %>
+        </div>
+      <% }) %>
+    </div>
+
+    <form action="/pin/<%= pin.id %>/comentar" method="POST" class="comentario-form">
+      <input type="text" name="comentario" placeholder="Comentar..." required />
+      <button type="submit">Postar</button>
+    </form>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+</body>
+</html>

@@ -10,7 +10,7 @@
 }
 
 .navbar-logo {
-  width: 60px;
+  width: 65px;
   height: 60px;
   border-radius: 50%;
 }
@@ -129,6 +129,7 @@
 .footer-divider {
   height: 20px;
   background-color: #cdd5df;
+  width: 100%;
 }
 
 .footer-content h4 {
