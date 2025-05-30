@@ -5,6 +5,8 @@
     <title>Photosphere</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="/styles/explorar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles/perfil.css" />
+    <link rel="stylesheet" href="/styles/nav-footer.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:400,600|Inter:700"
       rel="stylesheet"
@@ -12,125 +14,27 @@
   </head>
   <body>
     <!-- Header Navigation -->
-    <header>
-      <nav class="nav">
-        <div class="logo">
-          <img src="/images/phs.jpg" alt="logo" />
-        </div>
-        <button class="hamburger" aria-label="Toggle menu">☰</button>
-        <div class="nav-menu">
-          <div class="nav-item">Home</div>
-          <button class="btn btn-primary">Explorar</button>
-          <div class="nav-item-with-icon">
-            Criar <span class="chevron-down"></span>
-          </div>
-        </div>
-        <div class="search-bar">
-          <span class="search-icon"></span>
-          <input type="text" placeholder="Pesquisar" />
-        </div>
-        <div class="user-menu">
-          <div class="user-avatar">L</div>
-          <span class="chevron-down"></span>
-        </div>
-      </nav>
-    </header>
+     <%- include('partials/navbar') %> 
 
     <!-- Main Content -->
     <main class="main-content">
       <div class="header-text">
-        <div class="date">20 Março, 2025</div>
+        <div class="date" id="current-date"></div>
         <h1>Explorar</h1>
       </div>
-
-      <div class="photo-grid">
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-        <div class="photo-card">
-          <div
-            class="photo-content"
-            style="background-image: url('/images/gato.jpg')"
-          >
-            <div class="overlay">
-              <img class="user-icon" src="/images/heart.png" alt="User" />
-            </div>
-          </div>
-        </div>
-      </div>
+      
+      <div class="photo-grid" id="photo-grid"></div>
     </main>
 
     <!-- Back to Top -->
     <div class="back-to-top">
       <img src="/images/check.png" alt="Back to top" />
-      <button class="btn btn-secondary">Voltar ao início</button>
+      <button id="btnVoltarTopo" class="btn btn-secondary">Voltar ao início</button>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-brand">Photosphere.com</div>
-        <div class="footer-links">
-          <button class="footer-btn">Home</button>
-          <button class="footer-btn">Explorar</button>
-          <button class="footer-btn">Criar</button>
-          <button class="footer-btn">Contato</button>
-        </div>
-      </div>
-      <div class="footer-bar"></div>
-    </footer>
+    <%- include('partials/footer') %>
 
-    <script>
-      document.querySelector(".hamburger").addEventListener("click", () => {
-        document.querySelector(".nav-menu").classList.toggle("active");
-      });
-    </script>
+    <script src="/javascripts/explorar.js"></script>
   </body>
 </html>
