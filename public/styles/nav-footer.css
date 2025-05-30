@@ -16,7 +16,9 @@
 }
 
 .search-container {
-  flex: 0 0 62.5rem;
+  flex: 1;
+  min-width: 200px;
+  max-width: 1000px;
   background-color: #cdd5df;
   padding: 0.6rem 1rem;
   border-radius: 24px;
@@ -114,4 +116,40 @@
   background: #90a4b7;
   margin: 0.2rem auto 0;
   border-radius: 2px;
+}
+
+.footer {
+  background-color: #7ea1bc;
+  padding: 2rem 1rem;
+  color: white;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.footer-divider {
+  height: 20px;
+  background-color: #cdd5df;
+}
+
+.footer-content h4 {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 0.95rem;
+}
+
+.social-icons div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-icons i {
+  font-size: 1.2rem;
 }
