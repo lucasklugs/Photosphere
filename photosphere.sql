@@ -197,6 +197,7 @@ CREATE TABLE `usuarios` (
   `email` varchar(100) NOT NULL,
   `senha_hash` varchar(255) NOT NULL,
   `foto_perfil` varchar(255) DEFAULT NULL,
+  `foto_cover` varchar(255) DEFAULT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
@@ -209,7 +210,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,'2025-05-25 23:16:39'),(2,'Zezinho','zezinho@gmail.com','$2b$10$r3ex0I60at7qsZ8k7rlgbuDT1EfEcIwaVzjqDculB2NdgqHolb9uW',NULL,'2025-05-25 23:46:51'),(3,'Luis','luis@gmail.com','$2b$10$nUxtGTY6fkOmrVqMbcCt5ufrc1DV1Uk62XubwRjIvXym3UuNiucNu',NULL,'2025-05-29 18:44:05');
+INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(2,'Zezinho','zezinho@gmail.com','$2b$10$r3ex0I60at7qsZ8k7rlgbuDT1EfEcIwaVzjqDculB2NdgqHolb9uW',NULL, NULL,'2025-05-25 23:46:51'),(3,'Luis','luis@gmail.com','$2b$10$nUxtGTY6fkOmrVqMbcCt5ufrc1DV1Uk62XubwRjIvXym3UuNiucNu',NULL,NULL,'2025-05-29 18:44:05');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

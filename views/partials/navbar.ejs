@@ -1,0 +1,42 @@
+<nav class="navbar">
+  <div class="navbar-content">
+    <img src="/images/logo.png" alt="Logo" class="navbar-logo" />
+
+    <div class="search-container">
+    <img src="/images/lupa.png" alt="Buscar" class="search-icon" />
+    <input type="text" placeholder="Pesquisar..." />
+    </div>
+
+    <div class="user-controls">
+      <div class="user-button" onclick="toggleDropdown()">
+    <img src="/images/placeholder-avatar.png" alt="Usuário" class="user-photo" />
+    </div>
+      <div id="user-dropdown" class="dropdown hidden">
+        <a href="/perfil">Perfil</a>
+        <a href="/config">Configurações</a>
+        <a href="/logout">Sair</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar-links">
+    <a href="/explorar">Explorar</a>
+    <a href="/criar">Criar</a>
+  </div>
+</nav>
+
+<script>
+// Dropdown ao clicar na foto de perfil na navbar
+  function toggleDropdown() {
+    const dropdown = document.getElementById('user-dropdown');
+    dropdown.classList.toggle('hidden');
+  }
+
+  document.addEventListener('click', function (e) {
+    const btn = document.querySelector('.user-button');
+    const dropdown = document.getElementById('user-dropdown');
+    if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+</script>
