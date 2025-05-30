@@ -3,6 +3,8 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const connection = require('../db');
 
+//ROTAS GET
+
 // Página login
 router.get('/', function(req, res, next) {
   res.render('login', { title: 'Página de login' });
@@ -39,6 +41,8 @@ router.get('/perfil', function(req, res, next) {
 
   res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
 });
+
+//ROTAS POST
 
 // Cadastro de usuário
 router.post('/register', async (req, res) => {

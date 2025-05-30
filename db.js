@@ -22,4 +22,21 @@ pool.getConnection()
     })
     .catch(err => console.error('❌ Erro ao conectar ao banco:', err));
 
-module.exports = pool;
+async function buscarAdmin(usuario) {
+    const sql = "SELECT * FROM admin WHERE admemail=? AND admsenha=?;";
+    const [adminEncontrado] = await pool.query(sql, [usuario.email, usuario.senha]);
+
+    if (adminEncontrado && adminEncontrado.length > 0) {
+        return adminEncontrado[0];
+    } else {
+        return {};
+    }
+}
+
+async function buscarUsuarios() {
+  const [rows] = await pool.query("SELECT id, nome, email, 'Usuário' AS tipo FROM usuarios;");
+  return rows;
+}
+
+module.exports = { pool, buscarAdmin, buscarUsuarios };
+
