@@ -5,9 +5,14 @@
 }
 
 body {
-  background-color: #f7f8fa;
-  font-family: 'Segoe UI', sans-serif;
-  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.footer {
+  margin-top: auto;
 }
 
 .seguidores-container {
@@ -15,6 +20,10 @@ body {
   margin: 0 auto;
   padding: 40px 20px;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
 }
 
 .tab-buttons {
@@ -40,6 +49,7 @@ body {
 }
 
 .lista-usuarios {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -51,7 +61,8 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 90%;
-  max-width: 500px;
+  max-width: 700px;
+  min-width: 600px;
   background: #fff;
   border-radius: 12px;
   padding: 12px 20px;
