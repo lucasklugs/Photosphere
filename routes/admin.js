@@ -130,7 +130,7 @@ router.post('/categorias/adicionar', async (req, res) => {
 });
 
 // Logout
-router.get('/logout', function(req, res) {
+router.get('/logout_admin', function(req, res) {
   req.session.destroy(() => {
     res.redirect('/admin');
   });

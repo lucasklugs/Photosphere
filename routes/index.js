@@ -1,22 +1,43 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const { pool } = require('../db');
+var bcrypt = require('bcrypt');
+var { pool } = require('../db');
+var multer = require('multer');
+var path = require('path');
 
-//ROTAS GET
+// Função de verificação de login
+function verificarLogin(req, res, next) {
+  if (req.session && req.session.usuario) {
+    next();
+  } else {
+    res.redirect('/');
+  }
+}
+
+// Configuração de upload com multer
+const storage = multer.diskStorage({
+  destination: 'public/uploads',
+  filename: (req, file, cb) => {
+    const nomeArquivo = Date.now() + path.extname(file.originalname);
+    cb(null, nomeArquivo);
+  }
+});
+const upload = multer({ storage });
+
+// ROTAS GET
 
 // Página login
-router.get('/', function(req, res, next) {
+router.get('/', (req, res) => {
   res.render('login', { title: 'Página de login' });
 });
 
 // Página explorar
-router.get('/explorar', function(req, res, next) {
+router.get('/explorar', verificarLogin, (req, res) => {
   res.render('explorar', { title: 'Página - Explorar' });
 });
 
-// Página perfil (exemplo placeholder)
-router.get('/perfil', function(req, res, next) {
+// Página perfil
+router.get('/perfil', verificarLogin, (req, res) => {
   const user = {
     username: 'teste',
     cover: '/images/placeholder-cover.jpg',
@@ -41,20 +62,8 @@ router.get('/perfil', function(req, res, next) {
   res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
 });
 
-// Página criar.ejs
-const multer = require('multer');
-const path = require('path');
-
-const storage = multer.diskStorage({
-  destination: 'public/uploads',
-  filename: (req, file, cb) => {
-    const nomeArquivo = Date.now() + path.extname(file.originalname);
-    cb(null, nomeArquivo);
-  }
-});
-const upload = multer({ storage });
-
-router.get('/criar', function(req, res, next) {
+// Página criar
+router.get('/criar', verificarLogin, (req, res) => {
   const user = {
     username: 'teste',
     avatar: '/images/placeholder-avatar.png'
@@ -63,15 +72,16 @@ router.get('/criar', function(req, res, next) {
   res.render('criar', { title: 'Página - Criar', user });
 });
 
-router.post('/upload', upload.single('imagem'), (req, res) => {
+// Upload de imagem
+router.post('/upload', verificarLogin, upload.single('imagem'), (req, res) => {
   console.log(req.file);
   console.log(req.body);
 
   res.send('✅ Upload concluído com sucesso!');
 });
 
-// página pin
-router.get('/pin/:id', async (req, res) => {
+// Página de um pin específico
+router.get('/pin/:id', verificarLogin, async (req, res) => {
   const pinId = req.params.id;
 
   const pin = {
@@ -88,8 +98,8 @@ router.get('/pin/:id', async (req, res) => {
   res.render('pin', { pin, comentarios });
 });
 
-// página seguindo_seguidores
-router.get('/seguindo_seguidores', (req, res) => {
+// Página seguindo/seguidores
+router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
   const tab = req.query.tab || 'seguidores';
 
   const user = {
@@ -116,7 +126,7 @@ router.get('/seguindo_seguidores', (req, res) => {
   });
 });
 
-//ROTAS POST
+// ROTAS POST
 
 // Cadastro de usuário
 router.post('/register', async (req, res) => {
@@ -133,12 +143,20 @@ router.post('/register', async (req, res) => {
     }
 
     const senhaHash = await bcrypt.hash(senha, 10);
-    await pool.execute(
+    const [result] = await pool.execute(
       'INSERT INTO usuarios (nome, email, senha_hash, foto_perfil) VALUES (?, ?, ?, ?)',
       [nome, email, senhaHash, foto_perfil || null]
     );
 
-    res.status(201).send('✅ Usuário cadastrado com sucesso!');
+    // Já loga o usuário após o cadastro (opcional)
+    req.session.usuario = {
+      id: result.insertId,
+      nome: nome,
+      email: email,
+      foto_perfil: foto_perfil || null
+    };
+
+    res.redirect('/explorar');
   } catch (err) {
     console.error('❌ Erro ao registrar:', err);
     res.status(500).send('Erro ao registrar');
@@ -162,15 +180,30 @@ router.post('/login', async (req, res) => {
       return res.status(401).send('Senha incorreta');
     }
 
-    res.redirect('/explorar');
+    req.session.usuario = {
+      id: user.id,
+      nome: user.nome,
+      email: user.email,
+      foto_perfil: user.foto_perfil
+    };
 
+    res.redirect('/explorar');
   } catch (err) {
     console.error('❌ Erro no login:', err);
     res.status(500).send('Erro no login');
   }
 });
 
-//Função global de verificação de login
-
+// Logout
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Erro ao sair:', err);
+      return res.status(500).send('Erro ao sair');
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
+});
 
 module.exports = router;
