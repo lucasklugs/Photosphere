@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= user ? user.username : 'Usuário' %> | Perfil</title>
+  <link rel="stylesheet" href="/styles/seguindo_seguidores.css" />
+  <link rel="stylesheet" href="/styles/nav-footer.css" />
+</head>
+<body>
+<%- include('partials/navbar') %>
+
+<div class="seguidores-container">
+  <div class="tabs">
+    <div class="tab-buttons">
+      <a href="/seguindo_seguidores?tab=seguidores" class="<%= tab === 'seguidores' ? 'active' : '' %>">Seguidores</a>
+      <a href="/seguindo_seguidores?tab=seguindo" class="<%= tab === 'seguindo' ? 'active' : '' %>">Seguindo</a>
+    </div>
+  </div>
+
+  <div class="lista-usuarios">
+    <% listaUsuarios.forEach(usuario => { %>
+      <div class="usuario-card">
+        <div class="d-flex align-items-center">
+          <img src="<%= usuario.avatar || '/images/placeholder-avatar.png' %>" class="avatar" alt="Avatar">
+          <span class="nome"><%= usuario.nome %></span>
+        </div>
+        <% if (usuario.seguindo) { %>
+          <button class="btn seguindo">Seguindo</button>
+        <% } else if (usuario.seguirDeVolta) { %>
+          <button class="btn seguir-de-volta">Seguir de Volta</button>
+        <% } else { %>
+          <button class="btn btn-outline-primary">Seguir</button>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+
+<%- include('partials/footer') %>
+</body>
+</html>

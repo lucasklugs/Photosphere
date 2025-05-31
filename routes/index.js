@@ -21,7 +21,6 @@ router.get('/perfil', function(req, res, next) {
     username: 'teste',
     cover: '/images/placeholder-cover.jpg',
     avatar: '/images/placeholder-avatar.png',
-    handle: 'teste123',
     followers: 1200,
     saves: 350
   };
@@ -87,6 +86,34 @@ router.get('/pin/:id', async (req, res) => {
   ];
 
   res.render('pin', { pin, comentarios });
+});
+
+// página seguindo_seguidores
+router.get('/seguindo_seguidores', (req, res) => {
+  const tab = req.query.tab || 'seguidores';
+
+  const user = {
+    username: 'joaodasilva',
+    avatar: '/images/placeholder-avatar.png'
+  };
+
+  const listaUsuarios = tab === 'seguidores'
+    ? [
+        { nome: 'Usuário 3', avatar: '/images/placeholder-avatar.png', seguindo: true },
+        { nome: 'Usuário Num 5', avatar: '/images/placeholder-avatar.png', seguirDeVolta: true },
+        { nome: 'Usuário 32', avatar: '', seguindo: true }
+      ]
+    : [
+        { nome: 'Usuário 32', avatar: '/images/placeholder-avatar.png', seguindo: true },
+        { nome: 'Usuário 3', avatar: '/images/placeholder-avatar.png', seguindo: true }
+      ];
+
+  res.render('seguindo_seguidores', {
+    title: 'Seguidores',
+    tab,
+    listaUsuarios,
+    user
+  });
 });
 
 //ROTAS POST

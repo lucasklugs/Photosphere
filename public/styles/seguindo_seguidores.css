@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f7f8fa;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.seguidores-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.tab-buttons a {
+  padding: 10px 24px;
+  border-radius: 20px;
+  background-color: #d3dbe5;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab-buttons a.active {
+  background-color: #366195;
+  color: #fff;
+}
+
+.lista-usuarios {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.usuario-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.usuario-card .d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.usuario-card .avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.usuario-card .nome {
+  margin-left: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.usuario-card .btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.usuario-card .btn.seguindo {
+  background-color: #366195;
+  color: #fff;
+}
+
+.usuario-card .btn.seguir-de-volta {
+  background-color: #444;
+  color: #fff;
+}
+
+.usuario-card .btn.btn-outline-primary {
+  background-color: transparent;
+  color: #366195;
+  border: 2px solid #366195;
+}
+
+.usuario-card .btn:hover {
+  opacity: 0.9;
+}
