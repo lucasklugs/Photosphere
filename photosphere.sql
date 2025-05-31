@@ -53,7 +53,7 @@ CREATE TABLE `categorias` (
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,7 @@ CREATE TABLE `usuarios` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,7 +237,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(4,'Lucas','lucas@gmail.com','$2b$10$05m.LlMLGugsZ2WlY6XGj.sX.4AxjbiYZSpCIKQPCzMc9.az8q6Cy',NULL,NULL,'2025-05-31 00:40:43'),(5,'Maria','maria@uol.com.br','$2b$10$hX2TS2Dp1fSRbbHaldyh7.dGrwksGz/7OGEHfbPK.gjKQaYSJwGU2',NULL,NULL,'2025-05-31 03:11:54'),(6,'Vitor','vitor@hotmail.com','$2b$10$xrbF6rozwHc7gTrn/lGeyu2aq5QS/N23O7lvwilT3KYStrHPBGE8W',NULL,NULL,'2025-05-31 03:12:08'),(7,'Jamal','jamal@gmail.com','$2b$10$yfun4wdCctsrewN2VVBW7ubVyYz7aAWA3tlU0uah3LAzCBpLTkWvu',NULL,NULL,'2025-05-31 03:12:24'),(8,'Larissa','lari@gmail.com','$2b$10$PPYMviarlHVRm73Wa57q1uZPfflSyUrR0/ahLicxjgeZHlpYH/ZJ.',NULL,NULL,'2025-05-31 03:12:38'),(9,'Dejair Fagundes','deja@gmail.com','$2b$10$6jItFlg4EAHU4czh9.lJ3.qadhrxPRIr.sa8pRwSzZhB6/xt8SlrO',NULL,NULL,'2025-05-31 03:13:00');
+INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(4,'Lucas','lucas@gmail.com','$2b$10$05m.LlMLGugsZ2WlY6XGj.sX.4AxjbiYZSpCIKQPCzMc9.az8q6Cy',NULL,NULL,'2025-05-31 00:40:43'),(5,'Maria','maria@uol.com.br','$2b$10$hX2TS2Dp1fSRbbHaldyh7.dGrwksGz/7OGEHfbPK.gjKQaYSJwGU2',NULL,NULL,'2025-05-31 03:11:54'),(6,'Vitor','vitor@hotmail.com','$2b$10$xrbF6rozwHc7gTrn/lGeyu2aq5QS/N23O7lvwilT3KYStrHPBGE8W',NULL,NULL,'2025-05-31 03:12:08'),(7,'Jamal','jamal@gmail.com','$2b$10$yfun4wdCctsrewN2VVBW7ubVyYz7aAWA3tlU0uah3LAzCBpLTkWvu',NULL,NULL,'2025-05-31 03:12:24'),(8,'Larissa','lari@gmail.com','$2b$10$PPYMviarlHVRm73Wa57q1uZPfflSyUrR0/ahLicxjgeZHlpYH/ZJ.',NULL,NULL,'2025-05-31 03:12:38');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -250,4 +250,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31  0:15:36
+-- Dump completed on 2025-05-31 20:47:01
