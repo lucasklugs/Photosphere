@@ -22,3 +22,83 @@
       </nav>
     </div>
   </header>
+
+  <main>
+    <section class="dashboard">
+      <div class="dashboard-header">
+        <h2>Categorias</h2>
+        <button onclick="abrirModalAdicionar()">Adicionar</button>
+      </div>
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categorias.forEach(cat => { %>
+            <tr>
+              <td><%= cat.id %></td>
+              <td><%= cat.nome %></td>
+              <td>
+                <button type="button" class="delete-btn" onclick="abrirModalExcluir('<%= cat.id %>', '<%= cat.nome %>')">Excluir</button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Modal Adicionar Categoria -->
+  <div id="modalAdicionarCategoria" class="modal-backdrop">
+    <div class="modal-add">
+      <h3>Adicionar Categoria</h3>
+      <form action="/admin/categorias/adicionar" method="POST">
+        <input type="text" name="nome" placeholder="Nome da categoria" required />
+        <div class="modal-actions">
+          <button type="button" onclick="fecharModalAdicionar()">Cancelar</button>
+          <button type="submit">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Excluir Categoria -->
+  <div id="modalExcluirCategoria" class="modal-backdrop">
+    <div class="modal-content">
+      <h3>Excluir Categoria</h3>
+      <p id="mensagemConfirmacao"></p>
+      <form id="formExcluir" action="/admin/categorias/excluir" method="POST">
+        <input type="hidden" name="id" id="categoriaIdExcluir" />
+        <div class="modal-actions">
+          <button type="button" onclick="fecharModalExcluir()">Cancelar</button>
+          <button type="submit">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalAdicionar() {
+      document.getElementById('modalAdicionarCategoria').style.display = 'flex';
+    }
+
+    function fecharModalAdicionar() {
+      document.getElementById('modalAdicionarCategoria').style.display = 'none';
+    }
+
+    function abrirModalExcluir(id, nome) {
+      document.getElementById('mensagemConfirmacao').textContent = `Tem certeza que deseja excluir a categoria "${nome}"?`;
+      document.getElementById('categoriaIdExcluir').value = id;
+      document.getElementById('modalExcluirCategoria').style.display = 'flex';
+    }
+
+    function fecharModalExcluir() {
+      document.getElementById('modalExcluirCategoria').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

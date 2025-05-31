@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { buscarAdmin, buscarUsuarios, excluirUsuario } = require('../db');
+const { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, excluirCategoria, adicionarCategoria } = require('../db');
 
 //Rotas GET
 router.get('/', function(req, res, next) {
@@ -31,9 +31,10 @@ router.get('/categorias', async function(req, res) {
     }
 
     const usuarios = await buscarUsuarios();
+    const categorias = await buscarCategorias();
     res.render('admin/categorias', {
       admNome: req.session.admnome,
-      usuarios
+      usuarios, categorias
     });
   } catch (err) {
     console.error('Erro ao carregar dashboard:', err);
@@ -89,6 +90,42 @@ router.post('/usuarios/excluir/:id', async function(req, res) {
   } catch (err) {
     console.error('Erro ao excluir usuário:', err);
     res.status(500).send('Erro ao excluir usuário.');
+  }
+});
+
+router.post('/categorias/adicionar', async (req, res) => {
+  const { nome } = req.body;
+
+  try {
+    await pool.query('INSERT INTO categorias (nome) VALUES (?);', [nome]);
+    res.redirect('/admin/categorias');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Erro ao adicionar categoria');
+  }
+});
+
+router.post('/categorias/excluir', async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    await pool.query('DELETE FROM categorias WHERE id = ?', [id]);
+    res.redirect('/admin/categorias');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Erro ao excluir categoria');
+  }
+});
+
+router.post('/categorias/adicionar', async (req, res) => {
+  const { nome } = req.body;
+
+  try {
+    await adicionarCategoria(nome);
+    res.redirect('/admin/categorias');
+  } catch (error) {
+    console.error('Erro ao adicionar categoria:', error);
+    res.status(500).send('Erro ao adicionar categoria');
   }
 });
 

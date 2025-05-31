@@ -45,5 +45,24 @@ async function excluirUsuario(id) {
   await pool.query(sql, [id]);
 }
 
-module.exports = { pool, buscarAdmin, buscarUsuarios, excluirUsuario };
+//Função buscarCategorias
+async function buscarCategorias() {
+  const [rows] = await pool.query("SELECT id, nome FROM categorias;");
+  return rows;
+}
+
+//Função excluirCategoria
+async function excluirCategoria(id) {
+  const sql = 'DELETE FROM categorias WHERE id = ?';
+  await pool.query(sql, [id]);
+}
+
+// Função adicionarCategoria
+async function adicionarCategoria(nome) {
+  const sql = 'INSERT INTO categorias (nome) VALUES (?);';
+  await pool.query(sql, [nome]);
+}
+
+
+module.exports = { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, excluirCategoria, adicionarCategoria };
 

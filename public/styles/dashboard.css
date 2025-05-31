@@ -43,14 +43,13 @@ main {
   color: white;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  border-bottom: 2px solid transparent; 
+  transition: border-color 0.3s ease; 
 }
 
 .menu-centralizado a:hover {
-  color: #007BFF;
+  border-bottom-color: #007BFF;
 }
-
-
 
 .dashboard {
   background-color: #1c1c1c;

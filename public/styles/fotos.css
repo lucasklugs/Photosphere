@@ -43,11 +43,74 @@ main {
   color: white;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  border-bottom: 2px solid transparent; 
+  transition: border-color 0.3s ease; 
 }
 
 .menu-centralizado a:hover {
-  color: #007BFF;
+  border-bottom-color: #007BFF;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 864px;
+  margin: 40px auto 0;
+  padding: 0 16px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.photo-card {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.photo-content {
+  width: 100%;
+  height: 100%;
+  background-color: #767676;
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+  position: relative;
+}
+
+.x-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.x-btn img {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease;
+}
+
+.x-btn:hover img {
+  transform: scale(1.2);
+}
+
+.x-btn:active img {
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {
