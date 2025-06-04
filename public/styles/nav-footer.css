@@ -113,13 +113,18 @@
   display: block;
   height: 3px;
   width: 60%;
-  background: #90a4b7;
+  background: #2E6EA6;
   margin: 0.2rem auto 0;
   border-radius: 2px;
+  transition: width 0.2s ease;
+}
+
+.navbar-links a:hover::after {
+  width: 100%; 
 }
 
 .footer {
-  background-color: #7ea1bc;
+  background-color: #2E6EA6;
   padding: 2rem 1rem;
   color: white;
   text-align: center;

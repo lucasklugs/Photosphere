@@ -45,7 +45,7 @@ body {
 }
 
 .tab-buttons a.active {
-  background-color: #366195;
+  background-color: #2E6EA6;
   color: #fff;
 }
 
@@ -99,7 +99,7 @@ body {
 }
 
 .usuario-card .btn.seguindo {
-  background-color: #366195;
+  background-color: #2E6EA6;
   color: #fff;
 }
 
@@ -110,8 +110,8 @@ body {
 
 .usuario-card .btn.btn-outline-primary {
   background-color: transparent;
-  color: #366195;
-  border: 2px solid #366195;
+  color: #2E6EA6;
+  border: 2px solid #2E6EA6;
 }
 
 .usuario-card .btn:hover {

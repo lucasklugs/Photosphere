@@ -38,10 +38,12 @@ router.get('/explorar', verificarLogin, (req, res) => {
 
 // Página perfil
 router.get('/perfil', verificarLogin, (req, res) => {
+  const sessUser = req.session.usuario;
+
   const user = {
-    username: 'teste',
+    username: sessUser.nome,
     cover: '/images/placeholder-cover.jpg',
-    avatar: '/images/placeholder-avatar.png',
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
     followers: 1200,
     saves: 350
   };
@@ -148,7 +150,7 @@ router.post('/register', async (req, res) => {
       [nome, email, senhaHash, foto_perfil || null]
     );
 
-    // Já loga o usuário após o cadastro (opcional)
+    // Já loga o usuário após o cadastro
     req.session.usuario = {
       id: result.insertId,
       nome: nome,
