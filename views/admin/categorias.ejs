@@ -45,6 +45,7 @@
               <td><%= cat.nome %></td>
               <td>
                 <button type="button" class="delete-btn" onclick="abrirModalExcluir('<%= cat.id %>', '<%= cat.nome %>')">Excluir</button>
+                <button type="button" class="btn-add" onclick="abrirModalEditar('<%= cat.id %>', '<%= cat.nome %>')">Editar</button>
               </td>
             </tr>
           <% }); %>
@@ -54,7 +55,7 @@
   </main>
 
   <!-- Modal Adicionar Categoria -->
-  <div id="modalAdicionarCategoria" class="modal-backdrop">
+  <div id="modalAdicionarCategoria" class="modal-backdrop" style="display:none;">
     <div class="modal-add">
       <h3>Adicionar Categoria</h3>
       <form action="/admin/categorias/adicionar" method="POST">
@@ -68,7 +69,7 @@
   </div>
 
   <!-- Modal Excluir Categoria -->
-  <div id="modalExcluirCategoria" class="modal-backdrop">
+  <div id="modalExcluirCategoria" class="modal-backdrop" style="display:none;">
     <div class="modal-content">
       <h3>Excluir Categoria</h3>
       <p id="mensagemConfirmacao"></p>
@@ -82,23 +83,50 @@
     </div>
   </div>
 
+  <!-- Modal Editar Categoria -->
+  <div id="modalEditarCategoria" class="modal-backdrop" style="display:none;">
+    <div class="modal-content">
+      <h3>Editar Categoria</h3>
+      <form id="formEditarCategoria" method="POST">
+        <input type="text" id="nomeEditar" name="nome" placeholder="Nome da categoria" required />
+        <input type="hidden" id="idEditar" name="id" />
+        <div class="modal-actions">
+          <button type="button" onclick="fecharModalEditar()">Cancelar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
+    // Abrir modal Adicionar
     function abrirModalAdicionar() {
       document.getElementById('modalAdicionarCategoria').style.display = 'flex';
     }
-
     function fecharModalAdicionar() {
       document.getElementById('modalAdicionarCategoria').style.display = 'none';
     }
 
+    // Abrir modal Excluir
     function abrirModalExcluir(id, nome) {
       document.getElementById('mensagemConfirmacao').textContent = `Tem certeza que deseja excluir a categoria "${nome}"?`;
       document.getElementById('categoriaIdExcluir').value = id;
       document.getElementById('modalExcluirCategoria').style.display = 'flex';
     }
-
     function fecharModalExcluir() {
       document.getElementById('modalExcluirCategoria').style.display = 'none';
+    }
+
+    // Abrir modal Editar
+    function abrirModalEditar(id, nome) {
+      document.getElementById('nomeEditar').value = nome;
+      document.getElementById('idEditar').value = id;
+      const formEditar = document.getElementById('formEditarCategoria');
+      formEditar.action = `/admin/categorias/editar/${id}`; 
+      document.getElementById('modalEditarCategoria').style.display = 'flex';
+    }
+    function fecharModalEditar() {
+      document.getElementById('modalEditarCategoria').style.display = 'none';
     }
   </script>
 </body>

@@ -66,8 +66,10 @@ router.get('/perfil', verificarLogin, (req, res) => {
 
 // Página criar
 router.get('/criar', verificarLogin, (req, res) => {
+  const sessUser = req.session.usuario;
+
   const user = {
-    username: 'teste',
+    username: sessUser.nome,
     avatar: '/images/placeholder-avatar.png'
   };
 

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, excluirCategoria, adicionarCategoria } = require('../db');
+const { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, 
+  excluirCategoria, adicionarCategoria, atualizarCategoria  } = require('../db');
 
 //Rotas GET
 router.get('/', function(req, res, next) {
@@ -109,7 +110,7 @@ router.post('/categorias/excluir', async (req, res) => {
   const { id } = req.body;
 
   try {
-    await pool.query('DELETE FROM categorias WHERE id = ?', [id]);
+    await excluirCategoria(id);
     res.redirect('/admin/categorias');
   } catch (err) {
     console.error(err.message);
@@ -128,6 +129,46 @@ router.post('/categorias/adicionar', async (req, res) => {
     res.status(500).send('Erro ao adicionar categoria');
   }
 });
+
+router.get('/categorias/editar/:id', async function(req, res) {
+  try {
+    if (!req.session.admemail) {
+      return res.redirect('/admin');
+    }
+
+    const id = req.params.id;
+    const [rows] = await pool.query('SELECT * FROM categorias WHERE id = ?', [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).send('Categoria não encontrada.');
+    }
+
+    const categoria = rows[0];
+    res.render('admin/editarCategoria', {
+      admNome: req.session.admnome,
+      categoria
+    });
+
+  } catch (err) {
+    console.error('Erro ao carregar categoria para edição:', err);
+    res.status(500).send('Erro interno no servidor.');
+  }
+});
+
+// Rota POST para atualizar categoria
+router.post('/categorias/editar/:id', async function(req, res) {
+  try {
+    const id = req.params.id;
+    const { nome } = req.body;
+
+    await atualizarCategoria(id, nome);
+    res.redirect('/admin/categorias');
+  } catch (err) {
+    console.error('Erro ao atualizar categoria:', err);
+    res.status(500).send('Erro ao atualizar categoria.');
+  }
+});
+
 
 // Logout
 router.get('/logout_admin', function(req, res) {
