@@ -18,8 +18,7 @@ function formatDateBR(date) {
 //Botão coração
 document.querySelectorAll('.heart-btn').forEach(button => {
     button.addEventListener('click', () => {
-      // Redireciona para a seção de favoritos, pode ser uma página ou um id na mesma página
-      window.location.href = '/favoritos'; // ou '#favoritos' se for ancoragem
+      window.location.href = '/tab-favoritos'; 
     });
 });
 

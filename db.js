@@ -22,6 +22,7 @@ pool.getConnection()
     })
     .catch(err => console.error('❌ Erro ao conectar ao banco:', err));
 
+// Função buscarAdmin
 async function buscarAdmin(usuario) {
     const sql = "SELECT * FROM admin WHERE admemail=? AND admsenha=?;";
     const [adminEncontrado] = await pool.query(sql, [usuario.email, usuario.senha]);
@@ -33,31 +34,37 @@ async function buscarAdmin(usuario) {
     }
 }
 
+//Função buscarUsuarios
 async function buscarUsuarios() {
   const [rows] = await pool.query("SELECT id, nome, email, 'Usuário' AS tipo FROM usuarios;");
   return rows;
 }
 
+//Função excluirUsuario
 async function excluirUsuario(id) {
   const sql = 'DELETE FROM usuarios WHERE id = ?';
   await pool.query(sql, [id]);
 }
 
+//Função buscarCategorias
 async function buscarCategorias() {
   const [rows] = await pool.query("SELECT id, nome FROM categorias;");
   return rows;
 }
 
+//Função excluirCategoria
 async function excluirCategoria(id) {
   const sql = 'DELETE FROM categorias WHERE id = ?';
   await pool.query(sql, [id]);
 }
 
+//Função adicionarCategoria
 async function adicionarCategoria(nome) {
   const sql = 'INSERT INTO categorias (nome) VALUES (?);';
   await pool.query(sql, [nome]);
 }
 
+//Função atualizarCategoria
 async function atualizarCategoria(id, nome) {
   const sql = 'UPDATE categorias SET nome = ? WHERE id = ?;';
   await pool.query(sql, [nome, id]);

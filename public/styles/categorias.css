@@ -91,7 +91,6 @@ main {
   border-bottom: 1px solid #444;
 }
 
-/* Alinhamento das colunas: ID à esquerda, Nome centralizado, Ações à direita */
 .user-table th:nth-child(1),
 .user-table td:nth-child(1) {
   text-align: left; /* ID */
@@ -100,13 +99,13 @@ main {
 
 .user-table th:nth-child(2),
 .user-table td:nth-child(2) {
-  text-align: center; /* Nome */
+  text-align: center; 
   width: 55%;
 }
 
 .user-table th:nth-child(3),
 .user-table td:nth-child(3) {
-  text-align: right; /* Ações */
+  text-align: right; 
   width: 30%;
 }
 
@@ -162,13 +161,15 @@ main {
 }
 
 .btn-add {
-  background-color: #74a9d8;
-  color: white;
-  padding: 8px 16px;
+ background-color: transparent;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  color: #74a9d8;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.btn-add:hover {
+  color: #3a95e6;
 }
 
 .modal-backdrop {
