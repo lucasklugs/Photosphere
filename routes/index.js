@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
-var { pool, adicionarCurtida, buscarFotosComFavoritos } = require('../db');
-var multer = require('multer');
 var path = require('path');
+var multer = require('multer');
 
-// Função de verificação de login
+var db = require('../db');
+var pool = db.pool;
+
+// Middleware para verificar se o usuário está logado
 function verificarLogin(req, res, next) {
   if (req.session && req.session.usuario) {
     next();
@@ -14,7 +16,7 @@ function verificarLogin(req, res, next) {
   }
 }
 
-// Configuração de upload com multer
+// Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
   destination: 'public/uploads',
   filename: (req, file, cb) => {
@@ -24,22 +26,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ROTAS GET
+// --- Rotas ---
 
-// Página login
+// Página de login
 router.get('/', (req, res) => {
   res.render('login', { title: 'Página de login' });
 });
 
-// Página explorar
+// Página explorar - exige login
 router.get('/explorar', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
-
-  const fotos = await buscarFotosComFavoritos(sessUser.id);
+  const fotos = await db.buscarFotosComFavoritos(sessUser.id);
   res.render('explorar', { title: 'Página - Explorar', fotos });
 });
 
-// Página perfil
+// Página perfil - exige login
 router.get('/perfil', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
 
@@ -51,6 +52,7 @@ router.get('/perfil', verificarLogin, async (req, res) => {
     saves: 350
   };
 
+  // Pins estáticos para exemplo
   const pins = [
     { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 1' },
     { imageUrl: '/images/placeholder-4-5.png', title: 'Pin 2' },
@@ -58,13 +60,14 @@ router.get('/perfil', verificarLogin, async (req, res) => {
     { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 12' },
     { imageUrl: '/images/placeholder-4-5.png', title: 'Pin 22' }
   ];
-  const buscarFavoritosPorUsuario = require('../db').buscarFavoritosPorUsuario;
-  const favoritos = await buscarFavoritosPorUsuario(sessUser.id);
+
+  // Buscar favoritos reais do usuário
+  const favoritos = await db.buscarFavoritosPorUsuario(sessUser.id);
 
   res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
 });
 
-// Página criar
+// Página criar pin - exige login
 router.get('/criar', verificarLogin, (req, res) => {
   const sessUser = req.session.usuario;
 
@@ -76,33 +79,37 @@ router.get('/criar', verificarLogin, (req, res) => {
   res.render('criar', { title: 'Página - Criar', user });
 });
 
-// Upload de imagem
+// Upload de imagem - exige login
 router.post('/upload', verificarLogin, upload.single('imagem'), (req, res) => {
   console.log(req.file);
   console.log(req.body);
-
   res.send('✅ Upload concluído com sucesso!');
 });
 
-// Página de um pin específico
+// Página de um pin específico - exige login
 router.get('/pin/:id', verificarLogin, async (req, res) => {
   const pinId = req.params.id;
+  const pin = await db.buscarPinPorId(pinId);
 
-  const pin = {
-    id: pinId,
-    titulo: 'Cachorro com Pizza',
-    imagemUrl: '/uploads/cachorro-pizza.png'
-  };
+  if (!pin) return res.status(404).send('Pin não encontrado.');
 
-  const comentarios = [
-    { nome: 'João da Silva', texto: 'Muito fofo!' },
-    { nome: 'Maria', texto: 'Amei essa imagem 🐶🍕' }
-  ];
-
+  const comentarios = await db.buscarComentariosPorFoto(pinId);
   res.render('pin', { pin, comentarios });
 });
 
-// Página seguindo/seguidores
+// Enviar comentário para pin - exige login
+router.post('/pin/:id/comentar', verificarLogin, async (req, res) => {
+  const fotoId = req.params.id;
+  const { comentario } = req.body;
+  const usuarioId = req.session.usuario.id;
+
+  if (!comentario.trim()) return res.redirect(`/pin/${fotoId}`);
+
+  await db.adicionarComentario(usuarioId, fotoId, comentario);
+  res.redirect(`/pin/${fotoId}`);
+});
+
+// Página seguidores/seguindo - exige login
 router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
   const tab = req.query.tab || 'seguidores';
 
@@ -111,6 +118,7 @@ router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
     avatar: '/images/placeholder-avatar.png'
   };
 
+  // Lista simulada para seguidores ou seguindo
   const listaUsuarios = tab === 'seguidores'
     ? [
         { nome: 'Usuário 3', avatar: '/images/placeholder-avatar.png', seguindo: true },
@@ -130,8 +138,6 @@ router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
   });
 });
 
-// ROTAS POST
-
 // Cadastro de usuário
 router.post('/register', async (req, res) => {
   try {
@@ -141,22 +147,26 @@ router.post('/register', async (req, res) => {
       return res.status(400).send('Todos os campos são obrigatórios!');
     }
 
+    // Verifica se o email já existe
     const [rows] = await pool.execute("SELECT email FROM usuarios WHERE email = ?", [email]);
     if (rows.length > 0) {
       return res.status(409).send('E-mail já cadastrado!');
     }
 
+    // Criptografa senha
     const senhaHash = await bcrypt.hash(senha, 10);
+
+    // Insere usuário no banco
     const [result] = await pool.execute(
       'INSERT INTO usuarios (nome, email, senha_hash, foto_perfil) VALUES (?, ?, ?, ?)',
       [nome, email, senhaHash, foto_perfil || null]
     );
 
-    // Já loga o usuário após o cadastro
+    // Cria sessão do usuário
     req.session.usuario = {
       id: result.insertId,
-      nome: nome,
-      email: email,
+      nome,
+      email,
       foto_perfil: foto_perfil || null
     };
 
@@ -184,6 +194,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).send('Senha incorreta');
     }
 
+    // Cria sessão do usuário
     req.session.usuario = {
       id: user.id,
       nome: user.nome,
@@ -198,29 +209,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Favoritar ou desfavoritar uma foto - exige login
 router.post('/favoritar', verificarLogin, async (req, res) => {
   try {
     const usuarioId = req.session.usuario.id;
     const { fotoId } = req.body;
 
+    // Verifica se já favoritou
     const [rows] = await pool.query(
       'SELECT id FROM curtidas WHERE usuario_id = ? AND foto_id = ?',
       [usuarioId, fotoId]
     );
 
     if (rows.length > 0) {
-      // Já favoritou, então desfavorita
-      await pool.query(
-        'DELETE FROM curtidas WHERE usuario_id = ? AND foto_id = ?',
-        [usuarioId, fotoId]
-      );
+      // Remove favorito
+      await pool.query('DELETE FROM curtidas WHERE usuario_id = ? AND foto_id = ?', [usuarioId, fotoId]);
       return res.json({ favoritado: false });
     } else {
-      // Ainda não favoritou, então adiciona
-      await pool.query(
-        'INSERT INTO curtidas (usuario_id, foto_id) VALUES (?, ?)',
-        [usuarioId, fotoId]
-      );
+      // Adiciona favorito
+      await pool.query('INSERT INTO curtidas (usuario_id, foto_id) VALUES (?, ?)', [usuarioId, fotoId]);
       return res.json({ favoritado: true });
     }
   } catch (err) {
@@ -229,8 +236,7 @@ router.post('/favoritar', verificarLogin, async (req, res) => {
   }
 });
 
-
-// Logout
+// Logout - destrói a sessão
 router.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {

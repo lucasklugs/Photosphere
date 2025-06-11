@@ -1,19 +1,34 @@
-var express = require('express');
-var router = express.Router();
-const { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, 
-  excluirCategoria, adicionarCategoria, atualizarCategoria  } = require('../db');
+const express = require('express');
+const router = express.Router();
+const {
+  pool,
+  buscarAdmin,
+  buscarUsuarios,
+  excluirUsuario,
+  buscarCategorias,
+  excluirCategoria,
+  adicionarCategoria,
+  atualizarCategoria
+} = require('../db');
 
-//Rotas GET
-router.get('/', function(req, res, next) {
-  res.render('admin/login');  
+// Middleware para verificar sessão de admin
+function verificarSessaoAdmin(req, res, next) {
+  if (req.session && req.session.admemail) {
+    return next();
+  }
+  res.redirect('/admin');
+}
+
+// Rotas GET
+
+// Página de login admin
+router.get('/', (req, res) => {
+  res.render('admin/login');
 });
 
-router.get('/dashboard', async function(req, res) {
+// Dashboard admin (lista usuários)
+router.get('/dashboard', verificarSessaoAdmin, async (req, res) => {
   try {
-    if (!req.session.admemail) {
-      return res.redirect('/admin');
-    }
-
     const usuarios = await buscarUsuarios();
     res.render('admin/dashboard', {
       admNome: req.session.admnome,
@@ -25,51 +40,66 @@ router.get('/dashboard', async function(req, res) {
   }
 });
 
-router.get('/categorias', async function(req, res) {
+// Página categorias (lista usuários e categorias)
+router.get('/categorias', verificarSessaoAdmin, async (req, res) => {
   try {
-    if (!req.session.admemail) {
-      return res.redirect('/admin');
-    }
-
     const usuarios = await buscarUsuarios();
     const categorias = await buscarCategorias();
     res.render('admin/categorias', {
       admNome: req.session.admnome,
-      usuarios, categorias
+      usuarios,
+      categorias
     });
   } catch (err) {
-    console.error('Erro ao carregar dashboard:', err);
+    console.error('Erro ao carregar categorias:', err);
     res.status(500).send('Erro interno no servidor.');
-  } 
+  }
 });
 
-router.get('/fotos', async function(req, res) {
+// Página fotos (lista usuários)
+router.get('/fotos', verificarSessaoAdmin, async (req, res) => {
   try {
-    if (!req.session.admemail) {
-      return res.redirect('/admin');
-    }
-
     const usuarios = await buscarUsuarios();
     res.render('admin/fotos', {
       admNome: req.session.admnome,
       usuarios
     });
   } catch (err) {
-    console.error('Erro ao carregar dashboard:', err);
+    console.error('Erro ao carregar fotos:', err);
     res.status(500).send('Erro interno no servidor.');
-  }  
+  }
 });
 
-
-//Rotas POST
-router.post('/login', async function(req, res) {
+// Página editar categoria
+router.get('/categorias/editar/:id', verificarSessaoAdmin, async (req, res) => {
   try {
-    const email = req.body.email;
-    const senha = req.body.senha;
+    const id = req.params.id;
+    const [rows] = await pool.query('SELECT * FROM categorias WHERE id = ?', [id]);
 
+    if (rows.length === 0) {
+      return res.status(404).send('Categoria não encontrada.');
+    }
+
+    const categoria = rows[0];
+    res.render('admin/editarCategoria', {
+      admNome: req.session.admnome,
+      categoria
+    });
+  } catch (err) {
+    console.error('Erro ao carregar categoria para edição:', err);
+    res.status(500).send('Erro interno no servidor.');
+  }
+});
+
+// Rotas POST
+
+// Login admin
+router.post('/login', async (req, res) => {
+  try {
+    const { email, senha } = req.body;
     const admin = await buscarAdmin({ email, senha });
 
-    if (admin.admcodigo) {
+    if (admin && admin.admcodigo) {
       req.session.admcodigo = admin.admcodigo;
       req.session.admemail = admin.admemail;
       req.session.admnome = admin.admnome;
@@ -83,7 +113,8 @@ router.post('/login', async function(req, res) {
   }
 });
 
-router.post('/usuarios/excluir/:id', async function(req, res) {
+// Excluir usuário
+router.post('/usuarios/excluir/:id', async (req, res) => {
   try {
     const id = req.params.id;
     await excluirUsuario(id);
@@ -94,18 +125,21 @@ router.post('/usuarios/excluir/:id', async function(req, res) {
   }
 });
 
+// Adicionar categoria
 router.post('/categorias/adicionar', async (req, res) => {
   const { nome } = req.body;
 
   try {
-    await pool.query('INSERT INTO categorias (nome) VALUES (?);', [nome]);
+    // Usar função do DB ou query direta (evitar duplicação)
+    await adicionarCategoria(nome);
     res.redirect('/admin/categorias');
   } catch (err) {
-    console.error(err.message);
+    console.error('Erro ao adicionar categoria:', err);
     res.status(500).send('Erro ao adicionar categoria');
   }
 });
 
+// Excluir categoria
 router.post('/categorias/excluir', async (req, res) => {
   const { id } = req.body;
 
@@ -113,54 +147,16 @@ router.post('/categorias/excluir', async (req, res) => {
     await excluirCategoria(id);
     res.redirect('/admin/categorias');
   } catch (err) {
-    console.error(err.message);
+    console.error('Erro ao excluir categoria:', err);
     res.status(500).send('Erro ao excluir categoria');
   }
 });
 
-router.post('/categorias/adicionar', async (req, res) => {
-  const { nome } = req.body;
-
-  try {
-    await adicionarCategoria(nome);
-    res.redirect('/admin/categorias');
-  } catch (error) {
-    console.error('Erro ao adicionar categoria:', error);
-    res.status(500).send('Erro ao adicionar categoria');
-  }
-});
-
-router.get('/categorias/editar/:id', async function(req, res) {
-  try {
-    if (!req.session.admemail) {
-      return res.redirect('/admin');
-    }
-
-    const id = req.params.id;
-    const [rows] = await pool.query('SELECT * FROM categorias WHERE id = ?', [id]);
-
-    if (rows.length === 0) {
-      return res.status(404).send('Categoria não encontrada.');
-    }
-
-    const categoria = rows[0];
-    res.render('admin/editarCategoria', {
-      admNome: req.session.admnome,
-      categoria
-    });
-
-  } catch (err) {
-    console.error('Erro ao carregar categoria para edição:', err);
-    res.status(500).send('Erro interno no servidor.');
-  }
-});
-
-// Rota POST para atualizar categoria
-router.post('/categorias/editar/:id', async function(req, res) {
+// Atualizar categoria
+router.post('/categorias/editar/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const { nome } = req.body;
-
     await atualizarCategoria(id, nome);
     res.redirect('/admin/categorias');
   } catch (err) {
@@ -169,9 +165,8 @@ router.post('/categorias/editar/:id', async function(req, res) {
   }
 });
 
-
-// Logout
-router.get('/logout_admin', function(req, res) {
+// Logout admin
+router.get('/logout_admin', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/admin');
   });

@@ -10,17 +10,15 @@
 <%- include('partials/navbar') %>
 
 <main class="pin-container">
-  <a href="/explorar" class="voltar-btn">←</a>
-
   <div class="pin-left">
     <img src="<%= pin.imagemUrl %>" alt="<%= pin.titulo %>" class="pin-img" />
-    <button class="like-btn">♡</button>
+    <a href="/explorar" class="voltar-btn">❮</a>
   </div>
 
   <div class="pin-right">
     <div class="comentario-header">
       <div class="avatar-circle">J</div>
-      <span class="username">João da Silva</span>
+      <span class="username"><%= pin.autor %></span>
     </div>
 
     <div class="comentarios">

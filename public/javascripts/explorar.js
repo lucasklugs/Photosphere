@@ -40,3 +40,14 @@ document.querySelectorAll('.heart-btn').forEach(button => {
     });
   });
 });
+
+// Redirecionar para a página do pin ao clicar na imagem
+document.querySelectorAll('.photo-content').forEach(el => {
+  el.addEventListener('click', (e) => {
+    // Ignorar o clique se for no botão de favoritar ou imagem dentro dele
+    if (e.target.closest('.heart-btn')) return;
+
+    const fotoId = el.dataset.id;
+    window.location.href = `/pin/${fotoId}`;
+  });
+});
