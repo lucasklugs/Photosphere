@@ -23,7 +23,24 @@
         <h1>Explorar</h1>
       </div>
       
-      <div class="photo-grid" id="photo-grid"></div>
+      <div class="photo-grid" id="photo-grid">
+        <% fotos.forEach(foto => { %>
+          <div class="photo-card">
+            <div class="photo-content" style="background-image: url('<%= foto.url %>')" data-id="<%= foto.id %>">
+              <div class="overlay">
+                <button class="heart-btn" aria-label="Favoritar" data-id="<%= foto.id %>">
+                  <img src="/images/<%= foto.favoritado ? 'heart-filled.png' : 'heart.png' %>" alt="Favoritar" />
+                </button>
+              </div>
+            </div>
+            <div class="info">
+              <h3><%= foto.titulo %></h3>
+              <p><%= foto.descricao %></p>
+              <small><%= foto.categorias || 'Sem categoria' %></small>
+            </div>
+          </div>
+        <% }) %>
+      </div>
     </main>
 
     <!-- Back to Top -->

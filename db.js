@@ -70,5 +70,40 @@ async function atualizarCategoria(id, nome) {
   await pool.query(sql, [nome, id]);
 }
 
+// Função para adicionar uma curtida
+async function adicionarCurtida(usuarioId, fotoId) {
+  const sql = 'INSERT IGNORE INTO curtidas (usuario_id, foto_id) VALUES (?, ?)';
+  await pool.query(sql, [usuarioId, fotoId]);
+}
+
+// Buscar fotos favoritas de um usuário
+async function buscarFavoritosPorUsuario(usuarioId) {
+  const sql = `
+    SELECT f.id, f.titulo, f.url AS imageUrl
+    FROM fotos f
+    JOIN curtidas c ON c.foto_id = f.id
+    WHERE c.usuario_id = ?`;
+  const [rows] = await pool.query(sql, [usuarioId]);
+  return rows;
+}
+
+async function buscarFotosComFavoritos(usuarioId) {
+  const sql = `
+    SELECT 
+      f.id,
+      f.titulo,
+      f.descricao,
+      f.url,
+      GROUP_CONCAT(ca.nome) AS categorias,
+      CASE WHEN cu.id IS NULL THEN 0 ELSE 1 END AS favoritado
+    FROM fotos f
+    LEFT JOIN fotos_categorias fc ON fc.foto_id = f.id
+    LEFT JOIN categorias ca ON ca.id = fc.categoria_id
+    LEFT JOIN curtidas cu ON cu.foto_id = f.id AND cu.usuario_id = ?
+    GROUP BY f.id
+  `;
+  const [rows] = await pool.query(sql, [usuarioId]);
+  return rows;
+}
 module.exports = { pool, buscarAdmin, buscarUsuarios, excluirUsuario, buscarCategorias, excluirCategoria, 
-  adicionarCategoria, atualizarCategoria };
+  adicionarCategoria, atualizarCategoria, adicionarCurtida, buscarFavoritosPorUsuario, buscarFotosComFavoritos };

@@ -15,56 +15,28 @@ function formatDateBR(date) {
     dateDiv.textContent = formatDateBR(today);
 });
 
-//Botão coração
+// Botão coração - envia favorito
 document.querySelectorAll('.heart-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      window.location.href = '/tab-favoritos'; 
+  button.addEventListener('click', () => {
+    const fotoId = button.dataset.id;
+    const img = button.querySelector('img');
+    const favoritado = img.src.includes('heart-filled.png');
+
+    fetch('/favoritar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fotoId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.favoritado) {
+        img.src = '/images/heart-filled.png';
+      } else {
+        img.src = '/images/heart.png';
+      }
+    })
+    .catch(err => {
+      console.error('Erro ao favoritar/desfavoritar:', err);
     });
-});
-
-//Grid de imagens
-const photoGrid = document.getElementById('photo-grid');
-  const images = [
-    '/images/gato.jpg',
-    '/images/arara.jpg',
-    '/images/tucano.jpg',
-    '/images/hamburguer.jpg',
-    '/images/balao.jpg',
-    '/images/folha.jpg',
-    '/images/lagarto.jpg',
-    '/images/flor.jpg',
-    '/images/rio.jpg',
-    '/images/gato.jpg',
-    '/images/arara.jpg',
-    '/images/tucano.jpg',
-    '/images/hamburguer.jpg',
-    '/images/balao.jpg',
-    '/images/folha.jpg',
-    '/images/lagarto.jpg',
-    '/images/flor.jpg',
-    '/images/rio.jpg',
-    '/images/gato.jpg',
-    '/images/arara.jpg',
-    '/images/tucano.jpg',
-    '/images/hamburguer.jpg',
-    '/images/balao.jpg',
-    '/images/folha.jpg',
-    '/images/lagarto.jpg',
-    '/images/flor.jpg',
-    '/images/rio.jpg'
-  ];
-
-  images.forEach(src => {
-    const card = document.createElement('div');
-    card.classList.add('photo-card');
-    card.innerHTML = `
-      <div class="photo-content" style="background-image: url('${src}')">
-        <div class="overlay">
-          <button class="heart-btn" aria-label="Favoritar">
-            <img src="/images/heart.png" alt="Coração vermelho" />
-          </button>
-        </div>
-      </div>
-    `;
-    photoGrid.appendChild(card);
   });
+});

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
-var { pool } = require('../db');
+var { pool, adicionarCurtida, buscarFotosComFavoritos } = require('../db');
 var multer = require('multer');
 var path = require('path');
 
@@ -32,12 +32,15 @@ router.get('/', (req, res) => {
 });
 
 // Página explorar
-router.get('/explorar', verificarLogin, (req, res) => {
-  res.render('explorar', { title: 'Página - Explorar' });
+router.get('/explorar', verificarLogin, async (req, res) => {
+  const sessUser = req.session.usuario;
+
+  const fotos = await buscarFotosComFavoritos(sessUser.id);
+  res.render('explorar', { title: 'Página - Explorar', fotos });
 });
 
 // Página perfil
-router.get('/perfil', verificarLogin, (req, res) => {
+router.get('/perfil', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
 
   const user = {
@@ -55,11 +58,8 @@ router.get('/perfil', verificarLogin, (req, res) => {
     { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 12' },
     { imageUrl: '/images/placeholder-4-5.png', title: 'Pin 22' }
   ];
-
-  const favoritos = [
-    { imageUrl: '/images/placeholder-4-5.png', title: 'Pin Favorito 1' },
-    { imageUrl: '/images/placeholder-1-1.png', title: 'Pin Favorito 2' }
-  ];
+  const buscarFavoritosPorUsuario = require('../db').buscarFavoritosPorUsuario;
+  const favoritos = await buscarFavoritosPorUsuario(sessUser.id);
 
   res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
 });
@@ -197,6 +197,38 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Erro no login');
   }
 });
+
+router.post('/favoritar', verificarLogin, async (req, res) => {
+  try {
+    const usuarioId = req.session.usuario.id;
+    const { fotoId } = req.body;
+
+    const [rows] = await pool.query(
+      'SELECT id FROM curtidas WHERE usuario_id = ? AND foto_id = ?',
+      [usuarioId, fotoId]
+    );
+
+    if (rows.length > 0) {
+      // Já favoritou, então desfavorita
+      await pool.query(
+        'DELETE FROM curtidas WHERE usuario_id = ? AND foto_id = ?',
+        [usuarioId, fotoId]
+      );
+      return res.json({ favoritado: false });
+    } else {
+      // Ainda não favoritou, então adiciona
+      await pool.query(
+        'INSERT INTO curtidas (usuario_id, foto_id) VALUES (?, ?)',
+        [usuarioId, fotoId]
+      );
+      return res.json({ favoritado: true });
+    }
+  } catch (err) {
+    console.error('Erro ao alternar curtida:', err);
+    res.status(500).json({ erro: 'Erro interno' });
+  }
+});
+
 
 // Logout
 router.get('/logout', (req, res) => {
