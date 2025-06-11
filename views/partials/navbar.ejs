@@ -4,15 +4,21 @@
       <img src="/images/logo.png" alt="Logo" class="navbar-logo" />
     </a>
 
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
     <div class="search-container">
-    <img src="/images/lupa.png" alt="Buscar" class="search-icon" />
-    <input type="text" placeholder="Pesquisar..." />
+      <img src="/images/lupa.png" alt="Buscar" class="search-icon" />
+      <input type="text" placeholder="Pesquisar..." />
     </div>
 
     <div class="user-controls">
       <div class="user-button" onclick="toggleDropdown()">
-    <img src="/images/placeholder-avatar.png" alt="Usuário" class="user-photo" />
-    </div>
+        <img src="/images/placeholder-avatar.png" alt="Usuário" class="user-photo" />
+      </div>
       <div id="user-dropdown" class="dropdown hidden">
         <a href="/perfil">Perfil</a>
         <a href="/config">Configurações</a>
@@ -21,14 +27,14 @@
     </div>
   </div>
 
-  <div class="navbar-links">
+  <div class="navbar-links" id="nav-links">
     <a href="/explorar">Explorar</a>
     <a href="/criar">Criar</a>
   </div>
 </nav>
 
 <script>
-// Dropdown ao clicar na foto de perfil na navbar
+  // Dropdown do usuário
   function toggleDropdown() {
     const dropdown = document.getElementById('user-dropdown');
     dropdown.classList.toggle('hidden');
@@ -41,4 +47,10 @@
       dropdown.classList.add('hidden');
     }
   });
+
+  // Toggle do menu hamburguer
+  function toggleMenu() {
+    const links = document.getElementById('nav-links');
+    links.classList.toggle('active');
+  }
 </script>

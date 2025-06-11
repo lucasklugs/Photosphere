@@ -6,7 +6,6 @@
 
 html, body {
   height: 100%;
-  margin: 0;
   display: flex;
   flex-direction: column;
   font-family: 'Segoe UI', sans-serif;
@@ -23,28 +22,37 @@ footer {
 .upload-container {
   display: flex;
   justify-content: center;
-  margin: 40px 0px 40px 0px;
+  padding: 40px 16px;
 }
 
 .upload-form {
   display: flex;
-  gap: 20px;
+  flex-direction: row;
+  gap: 32px;
   background: white;
   border-radius: 24px;
-  padding: 20px;
+  padding: 32px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1000px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.upload-left, .upload-right {
+.upload-left,
+.upload-right {
+  flex: 1 1 350px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .upload-area {
   background: #cdd5df;
-  width: 350px;
-  height: 350px;
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 1 / 1;
   border-radius: 24px;
   display: flex;
   flex-direction: column;
@@ -52,30 +60,84 @@ footer {
   justify-content: center;
   cursor: pointer;
   text-align: center;
+  transition: background-color 0.3s ease;
+  padding: 20px;
+}
+
+.upload-area:hover {
+  background-color: #b8c4d1;
 }
 
 .upload-icon {
-  font-size: 30px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
-.upload-right input {
+.upload-right input,
+.upload-right button {
   width: 100%;
+  max-width: 400px;
   padding: 14px 16px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-bottom: 16px;
-  border: 1px solid #ccc;
   border-radius: 8px;
-  box-sizing: border-box;
+  border: 1px solid #ccc;
 }
 
 .upload-right button {
-  padding: 14px 16px;
-  font-size: 1.1rem;
   background: #2E6EA6;
-  border: none;
   color: white;
-  border-radius: 10px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.upload-right button:hover {
+  background-color: #225d90;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .upload-form {
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .upload-left, .upload-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .upload-area {
+    max-width: 300px;
+    width: 100%;
+  }
+
+  .upload-right input,
+  .upload-right button {
+    width: 90%;
+    max-width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-area {
+    max-width: 240px;
+  }
+
+  .upload-icon {
+    font-size: 24px;
+  }
+
+  .upload-right input,
+  .upload-right button {
+    font-size: 0.95rem;
+    padding: 10px 14px;
+  }
+
+  .upload-form {
+    padding: 16px;
+  }
 }
