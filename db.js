@@ -87,6 +87,7 @@ async function buscarFavoritosPorUsuario(usuarioId) {
   return rows;
 }
 
+// Buscar fotos com informações de categorias e se estão favoritas para um usuário específico
 async function buscarFotosComFavoritos(usuarioId) {
   const sql = `
     SELECT 

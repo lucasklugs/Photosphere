@@ -53,7 +53,7 @@ CREATE TABLE `categorias` (
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `curtidas` (
   KEY `foto_id` (`foto_id`),
   CONSTRAINT `curtidas_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   CONSTRAINT `curtidas_ibfk_2` FOREIGN KEY (`foto_id`) REFERENCES `fotos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,6 +122,7 @@ CREATE TABLE `curtidas` (
 
 LOCK TABLES `curtidas` WRITE;
 /*!40000 ALTER TABLE `curtidas` DISABLE KEYS */;
+INSERT INTO `curtidas` VALUES (22,13,14,'2025-06-11 00:32:28'),(24,13,5,'2025-06-11 00:32:44'),(25,13,6,'2025-06-11 00:32:45'),(26,13,7,'2025-06-11 00:32:45'),(27,13,4,'2025-06-11 00:32:46'),(28,13,3,'2025-06-11 00:32:47'),(29,13,9,'2025-06-11 00:32:48'),(30,13,8,'2025-06-11 00:32:49'),(31,13,10,'2025-06-11 00:32:50'),(33,13,12,'2025-06-11 00:32:54'),(34,13,15,'2025-06-11 00:32:55'),(35,13,16,'2025-06-11 00:32:56'),(36,13,13,'2025-06-11 00:32:56'),(37,13,11,'2025-06-11 00:32:57'),(38,13,17,'2025-06-11 00:32:59'),(39,13,18,'2025-06-11 00:35:52'),(40,13,19,'2025-06-11 00:35:53'),(43,13,1,'2025-06-11 00:39:28');
 /*!40000 ALTER TABLE `curtidas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +143,7 @@ CREATE TABLE `fotos` (
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `fotos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,6 +152,7 @@ CREATE TABLE `fotos` (
 
 LOCK TABLES `fotos` WRITE;
 /*!40000 ALTER TABLE `fotos` DISABLE KEYS */;
+INSERT INTO `fotos` VALUES (1,1,'Gato fofo','Um gato olhando curioso para a c?mera','/images/gato.jpg','2025-06-11 00:08:13'),(3,1,'Hamb?rguer gourmet','Com cheddar e bacon artesanal','/images/hamburguer.jpg','2025-06-11 00:08:13'),(4,1,'Arara Azul','Arara azul em galho de ?rvore tropical.','/images/arara.jpg','2025-06-11 00:11:57'),(5,1,'Tucano Colorido','Tucano com bico amarelo vibrante.','/images/tucano.jpg','2025-06-11 00:11:57'),(6,1,'Bal?o ao Amanhecer','Bal?o voando sobre colinas ao amanhecer.','/images/balao.jpg','2025-06-11 00:12:18'),(7,1,'Folha com Gotas','Folha verde com gotas de orvalho.','/images/folha.jpg','2025-06-11 00:12:18'),(8,1,'Lagarto Verde','Lagarto em uma rocha observando o ambiente.','/images/lagarto.jpg','2025-06-11 00:12:18'),(9,1,'Flor Amarela','Flor amarela sob a luz do sol.','/images/flor.jpg','2025-06-11 00:12:18'),(10,1,'Rio Tranquilo','Rio calmo entre ?rvores e pedras.','/images/rio.jpg','2025-06-11 00:12:18'),(11,1,'C?u Azul','C?u limpo com poucas nuvens brancas.','/images/ceu.jpg','2025-06-11 00:30:45'),(12,1,'Lobo na Neve','Lobo solit?rio observando ao longe.','/images/lobo.jpg','2025-06-11 00:30:45'),(13,1,'Bob Bonitinho','Um cachorro chamado Bob com olhar fofo.','/images/bob_bonitinho.jpg','2025-06-11 00:30:45'),(14,1,'Bob Descansando','Bob deitado em um gramado ao sol.','/images/bob.jpg','2025-06-11 00:30:45'),(15,1,'Sol Brilhando','Sol forte iluminando o c?u.','/images/sol.jpg','2025-06-11 00:30:45'),(16,1,'Girassol','Um girassol aberto acompanhando o sol.','/images/girassol.jpg','2025-06-11 00:30:45'),(17,1,'Teclado','Teclado de computador com ilumina??o RGB.','/images/teclado.jpg','2025-06-11 00:30:45'),(18,1,'Cachoeira','Queda d\'agua entre rochas e vegetacao.','/images/cachoeira.jpg','2025-06-11 00:35:29'),(19,1,'Paisagem Natural','Vista de campo, montanhas e ceu azul.','/images/paisagem.jpg','2025-06-11 00:35:29');
 /*!40000 ALTER TABLE `fotos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +230,7 @@ CREATE TABLE `usuarios` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,7 +239,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(4,'Lucas','lucas@gmail.com','$2b$10$05m.LlMLGugsZ2WlY6XGj.sX.4AxjbiYZSpCIKQPCzMc9.az8q6Cy',NULL,NULL,'2025-05-31 00:40:43'),(5,'Maria','maria@uol.com.br','$2b$10$hX2TS2Dp1fSRbbHaldyh7.dGrwksGz/7OGEHfbPK.gjKQaYSJwGU2',NULL,NULL,'2025-05-31 03:11:54'),(6,'Vitor','vitor@hotmail.com','$2b$10$xrbF6rozwHc7gTrn/lGeyu2aq5QS/N23O7lvwilT3KYStrHPBGE8W',NULL,NULL,'2025-05-31 03:12:08'),(7,'Jamal','jamal@gmail.com','$2b$10$yfun4wdCctsrewN2VVBW7ubVyYz7aAWA3tlU0uah3LAzCBpLTkWvu',NULL,NULL,'2025-05-31 03:12:24'),(8,'Larissa','lari@gmail.com','$2b$10$PPYMviarlHVRm73Wa57q1uZPfflSyUrR0/ahLicxjgeZHlpYH/ZJ.',NULL,NULL,'2025-05-31 03:12:38');
+INSERT INTO `usuarios` VALUES (1,'Matheus Ferreira Fagundes','matheusferreirafagundes23@gmail.com','$2b$10$Kpk/XqL2f8/nQuz076amAezgxxdZNei1KxUWynyyJF6G6UfB7A4mS',NULL,NULL,'2025-05-25 23:16:39'),(4,'Lucas','lucas@gmail.com','$2b$10$05m.LlMLGugsZ2WlY6XGj.sX.4AxjbiYZSpCIKQPCzMc9.az8q6Cy',NULL,NULL,'2025-05-31 00:40:43'),(5,'Maria','maria@uol.com.br','$2b$10$hX2TS2Dp1fSRbbHaldyh7.dGrwksGz/7OGEHfbPK.gjKQaYSJwGU2',NULL,NULL,'2025-05-31 03:11:54'),(6,'Vitor','vitor@hotmail.com','$2b$10$xrbF6rozwHc7gTrn/lGeyu2aq5QS/N23O7lvwilT3KYStrHPBGE8W',NULL,NULL,'2025-05-31 03:12:08'),(7,'Jamal','jamal@gmail.com','$2b$10$yfun4wdCctsrewN2VVBW7ubVyYz7aAWA3tlU0uah3LAzCBpLTkWvu',NULL,NULL,'2025-05-31 03:12:24'),(12,'Batatal','batatal@gmail.com','$2b$10$Op1tCSV4Kz/uokHuGFxRmeAv5MOqG.iv34PgBWXZ7/MKaeBm2ClZe',NULL,NULL,'2025-06-06 00:10:02'),(13,'Junior','junior@gmail.com','$2b$10$fuGZB8vqoSPVIzS4ejTvZOstQ6rCxpmU9q1Zr40hYS1DiseQGTSEu',NULL,NULL,'2025-06-11 00:12:44');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -250,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31 20:47:01
+-- Dump completed on 2025-06-10 21:43:17
