@@ -3,6 +3,7 @@ var router = express.Router();
 var bcrypt = require('bcrypt');
 var path = require('path');
 var multer = require('multer');
+const fs = require('fs');
 
 var db = require('../db');
 var pool = db.pool;
@@ -44,13 +45,13 @@ router.get('/explorar', verificarLogin, async (req, res) => {
 router.get('/perfil', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
 
-  const user = {
-    username: sessUser.nome,
-    cover: '/images/placeholder-cover.jpg',
-    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
-    followers: 1200,
-    saves: 350
-  };
+const user = {
+  username: sessUser.nome,
+  cover: sessUser.foto_cover || '/images/placeholder-cover.jpg',
+  avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
+  followers: 1200,
+  saves: 350
+};
 
   // Pins estáticos para exemplo
   const pins = [
@@ -109,6 +110,112 @@ router.post('/pin/:id/comentar', verificarLogin, async (req, res) => {
   res.redirect(`/pin/${fotoId}`);
 });
 
+// Página de configurações (GET) - exige login
+router.get('/config', verificarLogin, (req, res) => {
+  const sessUser = req.session.usuario;
+
+  // Informações do usuário
+  const user = {
+    nome: sessUser.nome,
+    email: sessUser.email,
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
+    cover: sessUser.foto_cover || '/images/placeholder_cover.jpg'
+  };
+
+  res.render('config', { title: 'Configurações', user });
+});
+
+// Atualizar perfil do usuário - exige login
+router.post('/config', verificarLogin, upload.fields([
+  { name: 'foto_perfil', maxCount: 1 },
+  { name: 'foto_cover', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const usuarioId = req.session.usuario.id;
+    const { nome, senha } = req.body;
+
+    if (!nome) {
+      return res.status(400).send('Nome é obrigatório.');
+    }
+
+    const fotoPerfil = req.files['foto_perfil'] ? `/uploads/${req.files['foto_perfil'][0].filename}` : req.session.usuario.foto_perfil;
+    const fotoCover = req.files['foto_cover'] ? `/uploads/${req.files['foto_cover'][0].filename}` : req.session.usuario.foto_cover;
+
+    // Remover foto_perfil antiga se existir
+    if (req.files['foto_perfil'] && req.session.usuario.foto_perfil && req.session.usuario.foto_perfil.startsWith('/uploads/')) {
+      const caminhoAntigo = path.join(__dirname, '../public', req.session.usuario.foto_perfil);
+      fs.unlink(caminhoAntigo, err => err && console.error('Erro ao excluir foto_perfil antiga:', err));
+    }
+
+    // Remover foto_cover antiga se existir
+    if (req.files['foto_cover'] && req.session.usuario.foto_cover && req.session.usuario.foto_cover.startsWith('/uploads/')) {
+      const caminhoAntigo = path.join(__dirname, '../public', req.session.usuario.foto_cover);
+      fs.unlink(caminhoAntigo, err => err && console.error('Erro ao excluir foto_cover antiga:', err));
+    }
+
+    // query
+    let query = 'UPDATE usuarios SET nome = ?, foto_perfil = ?, foto_cover = ?';
+    const params = [nome, fotoPerfil, fotoCover];
+
+    if (senha && senha.trim().length > 0) {
+      const senhaHash = await bcrypt.hash(senha, 10);
+      query += ', senha_hash = ?';
+      params.push(senhaHash);
+    }
+
+    query += ' WHERE id = ?';
+    params.push(usuarioId);
+
+    await pool.execute(query, params);
+
+    // Atualiza a sessão com os novos dados
+    req.session.usuario.nome = nome;
+    req.session.usuario.foto_perfil = fotoPerfil;
+    req.session.usuario.foto_cover = fotoCover;
+
+    res.redirect('/perfil');
+  } catch (err) {
+    console.error('Erro ao atualizar perfil:', err);
+    res.status(500).send('Erro ao atualizar perfil.');
+  }
+});
+
+// Deletar conta do usuário - exige login
+router.delete('/config/deletar-conta', verificarLogin, async (req, res) => {
+  try {
+    const usuarioId = req.session.usuario.id;
+
+    // Excluir fotos físicas (perfil e cover) da conta antes de deletar
+    if (req.session.usuario.foto_perfil && req.session.usuario.foto_perfil.startsWith('/uploads/')) {
+      const caminhoPerfil = path.join(__dirname, '../public', req.session.usuario.foto_perfil);
+      fs.unlink(caminhoPerfil, err => err && console.error('Erro ao excluir foto_perfil:', err));
+    }
+    if (req.session.usuario.foto_cover && req.session.usuario.foto_cover.startsWith('/uploads/')) {
+      const caminhoCover = path.join(__dirname, '../public', req.session.usuario.foto_cover);
+      fs.unlink(caminhoCover, err => err && console.error('Erro ao excluir foto_cover:', err));
+    }
+
+    // Deletar o usuário do banco
+    const [resultado] = await pool.query('DELETE FROM usuarios WHERE id = ?', [usuarioId]);
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).send('Usuário não encontrado');
+    }
+
+    // Destruir a sessão após deletar a conta
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Erro ao destruir sessão:', err);
+        return res.status(500).send('Erro ao finalizar sessão');
+      }
+      res.status(200).send('Conta deletada com sucesso');
+    });
+  } catch (err) {
+    console.error('Erro ao deletar conta:', err);
+    res.status(500).send('Erro ao deletar conta');
+  }
+});
+
 // Página seguidores/seguindo - exige login
 router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
   const tab = req.query.tab || 'seguidores';
@@ -141,10 +248,10 @@ router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
 // Cadastro de usuário
 router.post('/register', async (req, res) => {
   try {
-    const { nome, email, senha, foto_perfil } = req.body;
+    const { nome, email, senha, foto_perfil, foto_cover } = req.body;
 
     if (!nome || !email || !senha) {
-      return res.status(400).send('Todos os campos são obrigatórios!');
+      return res.status(400).send('Nome, email e senha são obrigatórios!');
     }
 
     // Verifica se o email já existe
@@ -158,8 +265,8 @@ router.post('/register', async (req, res) => {
 
     // Insere usuário no banco
     const [result] = await pool.execute(
-      'INSERT INTO usuarios (nome, email, senha_hash, foto_perfil) VALUES (?, ?, ?, ?)',
-      [nome, email, senhaHash, foto_perfil || null]
+      'INSERT INTO usuarios (nome, email, senha_hash, foto_perfil, foto_cover) VALUES (?, ?, ?, ?, ?)',
+      [nome, email, senhaHash, foto_perfil || null, foto_cover || null]
     );
 
     // Cria sessão do usuário
@@ -167,7 +274,8 @@ router.post('/register', async (req, res) => {
       id: result.insertId,
       nome,
       email,
-      foto_perfil: foto_perfil || null
+      foto_perfil: foto_perfil || null,
+      foto_cover: foto_cover || null
     };
 
     res.redirect('/explorar');
@@ -199,7 +307,8 @@ router.post('/login', async (req, res) => {
       id: user.id,
       nome: user.nome,
       email: user.email,
-      foto_perfil: user.foto_perfil
+      foto_perfil: user.foto_perfil,
+      foto_cover: user.foto_cover
     };
 
     res.redirect('/explorar');

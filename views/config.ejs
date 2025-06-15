@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Editar Perfil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/styles/config.css" />
+  <link rel="stylesheet" href="/styles/nav-footer.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,600|Inter:700" rel="stylesheet" />
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="main-content">
+    <div class="profile-container">
+      <h1>Editar Perfil</h1>
+      <form class="profile-edit" action="/config" method="POST" enctype="multipart/form-data">
+        <div class="photo-section">
+          <!-- Foto de Perfil -->
+          <div class="photo">
+            <img src="<%= user.avatar %>" alt="Foto do perfil" class="profile-photo" />
+            <label class="change-btn">
+              Alterar Foto
+              <input type="file" name="foto_perfil" accept="image/*" hidden />
+            </label>
+          </div>
+
+          <!-- Foto de Capa -->
+          <div class="cover">
+            <img src="<%= user.cover %>" alt="Foto de capa" class="cover-photo" />
+            <label class="change-btn">
+              Alterar Capa
+              <input type="file" name="foto_cover" id="foto_cover" accept="image/*" hidden />
+            </label>
+          </div>
+        </div>
+
+        <!-- Alterar Nome -->
+        <div class="form-section">
+          <label for="username">Alterar Nome</label>
+          <input type="text" id="username" name="nome" class="input-field" value="<%= user.nome %>" required />
+
+        <!-- Alterar Senha -->
+          <label for="password">Alterar Senha</label>
+          <input type="password" id="password" name="senha" class="input-field" placeholder="**********"/>
+
+          <p class="alert-text"><strong>**Atenção**</strong><br />Ao clicar nesse botão sua conta e todas suas fotos serão deletadas!</p>
+          <button class="delete-btn" type="button">Deletar a Conta</button>
+
+          <button class="save-btn" type="submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="/javascripts/editar_perfil.js"></script>
+</body>
+</html>
