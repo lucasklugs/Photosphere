@@ -1,3 +1,4 @@
+/* Reset básico */
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
@@ -12,6 +13,7 @@ main {
   padding: 40px 16px;
 }
 
+/* Container principal */
 .profile-container {
   background-color: white;
   border-radius: 20px;
@@ -29,7 +31,9 @@ main {
   margin-bottom: 32px;
 }
 
-.photo, .cover {
+/* Fotos de perfil e capa */
+.photo,
+.cover {
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
@@ -51,6 +55,7 @@ main {
   margin-top: 12px;
 }
 
+/* Botões de troca de imagem */
 .change-btn {
   margin-top: 12px;
   padding: 8px 20px;
@@ -66,6 +71,7 @@ main {
   background-color: #d5d5d5;
 }
 
+/* Campos de entrada */
 .input-field {
   width: 100%;
   padding: 12px;
@@ -77,6 +83,7 @@ main {
   color: #333;
 }
 
+/* Texto de alerta */
 .alert-text {
   font-size: 0.85rem;
   color: #ff4d4d;
@@ -84,6 +91,7 @@ main {
   margin-bottom: 8px;
 }
 
+/* Botão de excluir */
 .delete-btn {
   background-color: #e74c3c;
   color: white;
@@ -102,6 +110,7 @@ main {
   background-color: #c0392b;
 }
 
+/* Botão de salvar */
 .save-btn {
   background-color: #2E6EA6;
   color: white;
@@ -118,6 +127,7 @@ main {
   background-color: #2f6fc2;
 }
 
+/* Responsivo */
 @media (max-width: 500px) {
   .profile-container {
     padding: 24px 16px;

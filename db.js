@@ -1,10 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql2');
 
-// Exibe as credenciais carregadas
-console.log("Credenciais carregadas:", process.env.DB_USER, process.env.DB_PASS, process.env.DB_NAME);
-
-// Criação do pool de conexões
+// Configuração do pool de conexões
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
@@ -15,7 +12,7 @@ const pool = mysql.createPool({
     queueLimit: 0
 }).promise();
 
-// Testa a conexão com o banco
+// Teste de conexão
 pool.getConnection()
     .then(conn => {
         console.log('✅ Banco de dados conectado!');
@@ -28,6 +25,29 @@ async function buscarAdmin(usuario) {
     const sql = "SELECT * FROM admin WHERE admemail=? AND admsenha=?;";
     const [adminEncontrado] = await pool.query(sql, [usuario.email, usuario.senha]);
     return adminEncontrado.length > 0 ? adminEncontrado[0] : {};
+}
+
+async function buscarAdmins() {
+    const [rows] = await pool.query('SELECT admcodigo AS id, admnome AS nome, admemail AS email FROM admin');
+    return rows;
+}
+
+async function excluirAdmin(id) {
+    const sql = 'DELETE FROM admin WHERE admcodigo = ?';
+    await pool.query(sql, [id]);
+}
+
+async function promoverParaAdmin(userId) {
+    const [[user]] = await pool.query('SELECT nome, email FROM usuarios WHERE id = ?', [userId]);
+    if (!user) throw new Error('Usuário não encontrado');
+
+    await pool.query('INSERT INTO admin (admemail, admsenha, admnome) VALUES (?, ?, ?)', [
+        user.email,
+        '123', // senha padrão
+        user.nome
+    ]);
+
+    await pool.query('DELETE FROM usuarios WHERE id = ?', [userId]);
 }
 
 // === Funções para usuários ===
@@ -73,7 +93,8 @@ async function buscarFavoritosPorUsuario(usuarioId) {
         SELECT f.id, f.titulo, f.url AS imageUrl
         FROM fotos f
         JOIN curtidas c ON c.foto_id = f.id
-        WHERE c.usuario_id = ?`;
+        WHERE c.usuario_id = ?
+    `;
     const [rows] = await pool.query(sql, [usuarioId]);
     return rows;
 }
@@ -127,31 +148,13 @@ async function adicionarComentario(usuarioId, fotoId, texto) {
     `, [usuarioId, fotoId, texto]);
 }
 
-// Listar admins
-async function buscarAdmins() {
-  const [rows] = await pool.query('SELECT admcodigo AS id, admnome AS nome, admemail AS email FROM admin');
-  return rows;
-}
-
-// Promover usuário para admin
-async function promoverParaAdmin(userId) {
-  const [[user]] = await pool.query('SELECT nome, email FROM usuarios WHERE id = ?', [userId]);
-  if (!user) throw new Error('Usuário não encontrado');
-
-  await pool.query('INSERT INTO admin (admemail, admsenha, admnome) VALUES (?, ?, ?)', [
-    user.email,
-    '123', // senha padrão
-    user.nome
-  ]);
-
-  await pool.query('DELETE FROM usuarios WHERE id = ?', [userId]);
-}
-
 // Exportação das funções
 module.exports = {
     pool,
     buscarAdmin,
     buscarAdmins,
+    excluirAdmin,
+    promoverParaAdmin,
     buscarUsuarios,
     excluirUsuario,
     buscarCategorias,
@@ -163,6 +166,5 @@ module.exports = {
     buscarFotosComFavoritos,
     buscarPinPorId,
     buscarComentariosPorFoto,
-    adicionarComentario,
-    promoverParaAdmin
+    adicionarComentario
 };

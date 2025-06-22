@@ -6,6 +6,7 @@ const {
   buscarUsuarios,
   buscarAdmins,
   excluirUsuario,
+  excluirAdmin,
   promoverParaAdmin,
   buscarCategorias,
   excluirCategoria,
@@ -13,33 +14,15 @@ const {
   atualizarCategoria
 } = require('../db');
 
-// Middleware para verificar sessão de admin
+// Middleware para validar sessão de admin
 function verificarSessaoAdmin(req, res, next) {
-  if (req.session && req.session.admemail) {
-    return next();
-  }
+  if (req.session && req.session.admemail) return next();
   res.redirect('/admin');
 }
 
-// Página de login admin
+// Página de login
 router.get('/', (req, res) => {
   res.render('admin/login');
-});
-
-// Dashboard com abas de usuários e admins
-router.get('/dashboard', verificarSessaoAdmin, async (req, res) => {
-  try {
-    const usuarios = await buscarUsuarios();
-    const admins = await buscarAdmins();
-    res.render('admin/dashboard', {
-      admNome: req.session.admnome,
-      usuarios,
-      admins
-    });
-  } catch (err) {
-    console.error('Erro ao carregar dashboard:', err);
-    res.status(500).send('Erro interno no servidor.');
-  }
 });
 
 // Login admin
@@ -62,6 +45,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Dashboard (usuários e admins)
+router.get('/dashboard', verificarSessaoAdmin, async (req, res) => {
+  try {
+    const usuarios = await buscarUsuarios();
+    const admins = await buscarAdmins();
+    res.render('admin/dashboard', {
+      admNome: req.session.admnome,
+      usuarios,
+      admins
+    });
+  } catch (err) {
+    console.error('Erro ao carregar dashboard:', err);
+    res.status(500).send('Erro interno no servidor.');
+  }
+});
+
 // Promover usuário para admin
 router.post('/usuarios/promover/:id', async (req, res) => {
   try {
@@ -76,8 +75,7 @@ router.post('/usuarios/promover/:id', async (req, res) => {
 // Excluir usuário
 router.post('/usuarios/excluir/:id', async (req, res) => {
   try {
-    const id = req.params.id;
-    await excluirUsuario(id);
+    await excluirUsuario(req.params.id);
     res.redirect('/admin/dashboard');
   } catch (err) {
     console.error('Erro ao excluir usuário:', err);
@@ -85,7 +83,18 @@ router.post('/usuarios/excluir/:id', async (req, res) => {
   }
 });
 
-// Categorias
+// Excluir admin
+router.post('/admins/excluir/:id', async (req, res) => {
+  try {
+    await excluirAdmin(req.params.id);
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error('Erro ao excluir admin:', err);
+    res.status(500).send('Erro ao excluir admin.');
+  }
+});
+
+// Página de categorias
 router.get('/categorias', verificarSessaoAdmin, async (req, res) => {
   try {
     const usuarios = await buscarUsuarios();
@@ -101,37 +110,50 @@ router.get('/categorias', verificarSessaoAdmin, async (req, res) => {
   }
 });
 
+// Adicionar categoria
 router.post('/categorias/adicionar', async (req, res) => {
-  const { nome } = req.body;
   try {
-    await adicionarCategoria(nome);
+    await adicionarCategoria(req.body.nome);
     res.redirect('/admin/categorias');
   } catch (err) {
     console.error('Erro ao adicionar categoria:', err);
-    res.status(500).send('Erro ao adicionar categoria');
+    res.status(500).send('Erro ao adicionar categoria.');
   }
 });
 
+// Excluir categoria
 router.post('/categorias/excluir', async (req, res) => {
-  const { id } = req.body;
   try {
-    await excluirCategoria(id);
+    await excluirCategoria(req.body.id);
     res.redirect('/admin/categorias');
   } catch (err) {
     console.error('Erro ao excluir categoria:', err);
-    res.status(500).send('Erro ao excluir categoria');
+    res.status(500).send('Erro ao excluir categoria.');
   }
 });
 
+// Editar categoria
 router.post('/categorias/editar/:id', async (req, res) => {
   try {
-    const id = req.params.id;
-    const { nome } = req.body;
-    await atualizarCategoria(id, nome);
+    await atualizarCategoria(req.params.id, req.body.nome);
     res.redirect('/admin/categorias');
   } catch (err) {
     console.error('Erro ao atualizar categoria:', err);
     res.status(500).send('Erro ao atualizar categoria.');
+  }
+});
+
+// Página fotos
+router.get('/fotos', verificarSessaoAdmin, async (req, res) => {
+  try {
+    const usuarios = await buscarUsuarios();
+    res.render('admin/fotos', {
+      admNome: req.session.admnome,
+      usuarios
+    });
+  } catch (err) {
+    console.error('Erro ao carregar fotos:', err);
+    res.status(500).send('Erro interno no servidor.');
   }
 });
 

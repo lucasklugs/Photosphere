@@ -1,3 +1,4 @@
+/* Configurações gerais */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -11,6 +12,7 @@ main {
   margin: 0 auto;
 }
 
+/* Navbar */
 .navbar {
   background-color: #1a1a1a;
   color: white;
@@ -43,21 +45,23 @@ main {
   color: white;
   text-decoration: none;
   font-weight: 500;
-  border-bottom: 2px solid transparent; 
-  transition: border-color 0.3s ease; 
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
 }
 
 .menu-centralizado a:hover {
   border-bottom-color: #007BFF;
 }
 
+/* Dashboard */
 .dashboard {
   background-color: #1c1c1c;
   padding: 1rem;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Tabela de usuários/admins */
 .user-table {
   width: 100%;
   border-collapse: collapse;
@@ -79,6 +83,7 @@ main {
   border-radius: 4px;
 }
 
+/* Botão de excluir */
 .delete-btn {
   background-color: transparent;
   border: none;
@@ -91,6 +96,7 @@ main {
   color: #ff5c57;
 }
 
+/* Modal de confirmação */
 .modal {
   position: fixed;
   top: 0;
@@ -118,6 +124,7 @@ main {
   cursor: pointer;
 }
 
+/* Abas do dashboard */
 .tabs {
   display: flex;
   gap: 10px;
@@ -150,7 +157,7 @@ main {
   display: block;
 }
 
-
+/* Responsividade */
 @media (max-width: 768px) {
   .menu-centralizado ul {
     flex-direction: column;
