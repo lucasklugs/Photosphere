@@ -3,7 +3,7 @@ var router = express.Router();
 var bcrypt = require('bcrypt');
 var path = require('path');
 var multer = require('multer');
-const fs = require('fs');
+var fs = require('fs');
 
 var db = require('../db');
 var pool = db.pool;

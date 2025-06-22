@@ -127,10 +127,31 @@ async function adicionarComentario(usuarioId, fotoId, texto) {
     `, [usuarioId, fotoId, texto]);
 }
 
+// Listar admins
+async function buscarAdmins() {
+  const [rows] = await pool.query('SELECT admcodigo AS id, admnome AS nome, admemail AS email FROM admin');
+  return rows;
+}
+
+// Promover usuário para admin
+async function promoverParaAdmin(userId) {
+  const [[user]] = await pool.query('SELECT nome, email FROM usuarios WHERE id = ?', [userId]);
+  if (!user) throw new Error('Usuário não encontrado');
+
+  await pool.query('INSERT INTO admin (admemail, admsenha, admnome) VALUES (?, ?, ?)', [
+    user.email,
+    '123', // senha padrão
+    user.nome
+  ]);
+
+  await pool.query('DELETE FROM usuarios WHERE id = ?', [userId]);
+}
+
 // Exportação das funções
 module.exports = {
     pool,
     buscarAdmin,
+    buscarAdmins,
     buscarUsuarios,
     excluirUsuario,
     buscarCategorias,
@@ -142,5 +163,6 @@ module.exports = {
     buscarFotosComFavoritos,
     buscarPinPorId,
     buscarComentariosPorFoto,
-    adicionarComentario
+    adicionarComentario,
+    promoverParaAdmin
 };

@@ -4,26 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard do Administrador</title>
-  <link href="https://fonts.googleapis.com/css2?family=monoton&display=swap" rel="stylesheet">
   <link href="/styles/dashboard.css" rel="stylesheet" />
+  <script src="/javascripts/dashboard.js" defer></script>
 </head>
-
-<!-- JS do Modal -->
-<script>
-  function abrirModal(userId, userName) {
-    const modal = document.getElementById('modalConfirmacao');
-    const texto = document.getElementById('textoModal');
-    const form = document.getElementById('formExcluir');
-
-    texto.textContent = `Tem certeza que deseja excluir o usuário "${userName}"?`;
-    form.action = `/admin/usuarios/excluir/${userId}`;
-    modal.style.display = 'flex';
-  }
-
-  function fecharModal() {
-    document.getElementById('modalConfirmacao').style.display = 'none';
-  }
-</script>
 
 <body>
   <header class="navbar">
@@ -32,7 +15,7 @@
       <p class="admin-nome">Bem-vindo, <%= admNome %></p>
       <nav class="menu-centralizado">
         <ul>
-          <li><a href="/admin/dashboard">Usuários</a></li>
+          <li><a href="/admin/dashboard">Dashboard</a></li>
           <li><a href="/admin/categorias">Categorias</a></li>
           <li><a href="/admin/fotos">Fotos</a></li>
           <li><a href="/admin/logout_admin">Sair</a></li>
@@ -43,34 +26,75 @@
 
   <main>
     <section class="dashboard">
-      <h2>Usuários</h2>
-      <table class="user-table">
-        <thead>
-          <tr>
-            <th>Usuário</th>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% usuarios.forEach(user => { %>
+      <div class="tabs">
+        <button id="btn-usuarios" class="tab-btn" onclick="trocarAba('usuarios')">Usuários</button>
+        <button id="btn-admins" class="tab-btn" onclick="trocarAba('admins')">Admins</button>
+      </div>
+
+      <!-- Aba Usuários -->
+      <section id="tab-usuarios" class="tab-content">
+        <h2>Usuários</h2>
+        <table class="user-table">
+          <thead>
             <tr>
-              <td><%= user.email %></td>
-              <td><%= user.nome %></td>
-              <td>
-                <select>
-                  <option <%= user.tipo === 'ADMIN' ? 'selected' : '' %>>Admin</option>
-                  <option <%= user.tipo === 'Usuário' ? 'selected' : '' %>>Usuário</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="delete-btn" onclick="abrirModal('<%= user.id %>', '<%= user.nome %>')">Excluir</button>
-              </td>
+              <th>Email</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ações</th>
             </tr>
-          <% }); %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% usuarios.forEach(user => { %>
+              <tr>
+                <td><%= user.email %></td>
+                <td><%= user.nome %></td>
+                <td>
+                  <form id="form-promover-<%= user.id %>" action="/admin/usuarios/promover/<%= user.id %>" method="POST">
+                    <select onchange="alterarTipo('<%= user.id %>', 'Usuário', this)">
+                      <option value="usuario" selected>Usuário</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </form>
+                </td>
+                <td>
+                  <button type="button" class="delete-btn" onclick="abrirModal('<%= user.id %>', '<%= user.nome %>', 'Usuário')">Excluir</button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Aba Admins -->
+      <section id="tab-admins" class="tab-content">
+        <h2>Admins</h2>
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% admins.forEach(admin => { %>
+              <tr>
+                <td><%= admin.email %></td>
+                <td><%= admin.nome %></td>
+                <td>
+                    <select>
+                      <option value="admin" selected>Admin</option>
+                    </select>
+                </td>
+                <td>
+                  <button type="button" class="delete-btn" onclick="abrirModal('<%= admin.id %>', '<%= admin.nome %>', 'Admin')">Excluir</button>
+                </td>
+              </tr>
+           <% }); %>
+          </tbody>
+        </table>
+      </section>
     </section>
   </main>
 
@@ -84,6 +108,5 @@
       </form>
     </div>
   </div>
-
 </body>
 </html>
