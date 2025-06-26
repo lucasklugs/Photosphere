@@ -38,7 +38,11 @@ router.get('/', (req, res) => {
 router.get('/explorar', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
   const fotos = await db.buscarFotosComFavoritos(sessUser.id);
-  res.render('explorar', { title: 'Página - Explorar', fotos });
+  const user = {
+    username: sessUser.nome,
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
+  };
+  res.render('explorar', { title: 'Página - Explorar', fotos, user });
 });
 
 // Página perfil - exige login
@@ -121,7 +125,12 @@ router.get('/pin/:id', verificarLogin, async (req, res) => {
   if (!pin) return res.status(404).send('Pin não encontrado.');
 
   const comentarios = await db.buscarComentariosPorFoto(pinId);
-  res.render('pin', { pin, comentarios });
+  const sessUser = req.session.usuario;
+  const user = {
+    username: sessUser.nome,
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
+  };
+  res.render('pin', { pin, comentarios, user });
 });
 
 // Enviar comentário para pin - exige login
@@ -245,12 +254,11 @@ router.delete('/config/deletar-conta', verificarLogin, async (req, res) => {
 // Página seguidores/seguindo - exige login
 router.get('/seguindo_seguidores', verificarLogin, (req, res) => {
   const tab = req.query.tab || 'seguidores';
-
+  const sessUser = req.session.usuario;
   const user = {
-    username: 'joaodasilva',
-    avatar: '/images/placeholder-avatar.png'
+    username: sessUser.nome,
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
   };
-
   // Lista simulada para seguidores ou seguindo
   const listaUsuarios = tab === 'seguidores'
     ? [

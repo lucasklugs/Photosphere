@@ -17,7 +17,11 @@
 
     <div class="user-controls">
       <div class="user-button" onclick="toggleDropdown()">
-        <img src="/images/placeholder-avatar.png" alt="Usuário" class="user-photo" />
+        <img
+          src="<%= user && user.avatar ? user.avatar : '/images/placeholder-avatar.png' %>"
+          alt="Usuário"
+          class="user-photo"
+        />
       </div>
       <div id="user-dropdown" class="dropdown hidden">
         <a href="/perfil">Perfil</a>
@@ -36,21 +40,21 @@
 <script>
   // Dropdown do usuário
   function toggleDropdown() {
-    const dropdown = document.getElementById('user-dropdown');
-    dropdown.classList.toggle('hidden');
+    const dropdown = document.getElementById("user-dropdown");
+    dropdown.classList.toggle("hidden");
   }
 
-  document.addEventListener('click', function (e) {
-    const btn = document.querySelector('.user-button');
-    const dropdown = document.getElementById('user-dropdown');
+  document.addEventListener("click", function (e) {
+    const btn = document.querySelector(".user-button");
+    const dropdown = document.getElementById("user-dropdown");
     if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add('hidden');
+      dropdown.classList.add("hidden");
     }
   });
 
   // Toggle do menu hamburguer
   function toggleMenu() {
-    const links = document.getElementById('nav-links');
-    links.classList.toggle('active');
+    const links = document.getElementById("nav-links");
+    links.classList.toggle("active");
   }
 </script>
