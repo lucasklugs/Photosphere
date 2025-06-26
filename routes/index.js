@@ -45,31 +45,38 @@ router.get('/explorar', verificarLogin, async (req, res) => {
 router.get('/perfil', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
 
-const user = {
-  username: sessUser.nome,
-  cover: sessUser.foto_cover || '/images/placeholder-cover.jpg',
-  avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
-  followers: 1200,
-  saves: 350
-};
+  const user = {
+    username: sessUser.nome,
+    cover: sessUser.foto_cover || '/images/placeholder-cover.jpg',
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png',
+    followers: 1200,
+    saves: 350
+  };
 
-  // Pins estáticos para exemplo
-  const pins = [
-    { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 1' },
-    { imageUrl: '/images/placeholder-4-5.png', title: 'Pin 2' },
-    { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 3' },
-    { imageUrl: '/images/placeholder-1-1.png', title: 'Pin 12' },
-    { imageUrl: '/images/placeholder-4-5.png', title: 'Pin 22' }
-  ];
+  // Buscar categorias do banco
+  const categorias = await db.buscarCategorias();
+
+  // Filtro de categoria
+  const categoriaId = req.query.categoriaId || null;
+  let pinsDb;
+  if (categoriaId) {
+    pinsDb = await db.buscarFotosPorUsuarioECategoria(sessUser.id, categoriaId);
+  } else {
+    pinsDb = await db.buscarFotosPorUsuario(sessUser.id);
+  }
+  const pins = pinsDb.map(pin => ({
+    imageUrl: pin.url,
+    title: pin.titulo || 'Sem título'
+  }));
 
   // Buscar favoritos reais do usuário
   const favoritos = await db.buscarFavoritosPorUsuario(sessUser.id);
 
-  res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos });
+  res.render('perfil', { title: 'Página - Perfil', user, pins, favoritos, categorias, categoriaId });
 });
 
 // Página criar pin - exige login
-router.get('/criar', verificarLogin, (req, res) => {
+router.get('/criar', verificarLogin, async (req, res) => {
   const sessUser = req.session.usuario;
 
   const user = {
@@ -77,14 +84,33 @@ router.get('/criar', verificarLogin, (req, res) => {
     avatar: '/images/placeholder-avatar.png'
   };
 
-  res.render('criar', { title: 'Página - Criar', user });
+  // Buscar categorias do banco
+  const categorias = await db.buscarCategorias();
+
+  res.render('criar', { title: 'Página - Criar', user, categorias });
 });
 
 // Upload de imagem - exige login
-router.post('/upload', verificarLogin, upload.single('imagem'), (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-  res.send('✅ Upload concluído com sucesso!');
+router.post('/upload', verificarLogin, upload.single('imagem'), async (req, res) => {
+  try {
+    const sessUser = req.session.usuario;
+    const { titulo, descricao, categoria } = req.body;
+    const imageUrl = '/uploads/' + req.file.filename;
+
+    // Salvar no banco com origem 'upload' e obter o id da foto
+    const fotoId = await db.adicionarFoto(sessUser.id, titulo, descricao, imageUrl, 'upload');
+
+    // Associar foto à categoria selecionada
+    if (categoria) {
+      await db.associarFotoCategoria(fotoId, categoria);
+    }
+
+    // Redirecionar para o perfil
+    res.redirect('/perfil');
+  } catch (err) {
+    console.error('Erro ao salvar imagem:', err);
+    res.status(500).send('Erro ao salvar imagem');
+  }
 });
 
 // Página de um pin específico - exige login

@@ -1,28 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title><%= user.username %> | Perfil</title>
-  <link rel="stylesheet" href="/styles/criar.css" />
-  <link rel="stylesheet" href="/styles/nav-footer.css" />
-</head>
-<body>
-<%- include('partials/navbar') %>
-<div class="upload-container">
-  <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
-    <div class="upload-left">
-      <label for="imagem" class="upload-area">
-        <input type="file" id="imagem" name="imagem" hidden>
-        <div class="upload-icon">⬆</div>
-        <p>Faça o upload ou arraste o arquivo e solte aqui</p>
-      </label>
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= user.username %> | Perfil</title>
+    <link rel="stylesheet" href="/styles/criar.css" />
+    <link rel="stylesheet" href="/styles/nav-footer.css" />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+    <div class="upload-container">
+      <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+        class="upload-form"
+      >
+        <div class="upload-left">
+          <label for="imagem" class="upload-area">
+            <input type="file" id="imagem" name="imagem" hidden />
+            <div class="upload-icon">⬆</div>
+            <p>Faça o upload ou arraste o arquivo e solte aqui</p>
+          </label>
+        </div>
+        <div class="upload-right">
+          <input
+            type="text"
+            name="titulo"
+            placeholder="Adicione um título"
+            required
+          />
+          <select name="categoria" required>
+            <option value="">Escolha a categoria</option>
+            <% categorias.forEach(function(cat) { %>
+            <option value="<%= cat.id %>"><%= cat.nome %></option>
+            <% }) %>
+          </select>
+          <button type="submit">Enviar</button>
+        </div>
+      </form>
     </div>
-    <div class="upload-right">
-      <input type="text" name="titulo" placeholder="Adicione um título" required />
-      <input type="text" name="categoria" placeholder="Escolha a categoria" required />
-      <button type="submit">Enviar</button>
-    </div>
-  </form>
-</div>
-<%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+  </body>
+</html>

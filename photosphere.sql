@@ -84,7 +84,7 @@ CREATE TABLE `comentarios` (
   KEY `foto_id` (`foto_id`),
   CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`foto_id`) REFERENCES `fotos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `comentarios` (
 
 LOCK TABLES `comentarios` WRITE;
 /*!40000 ALTER TABLE `comentarios` DISABLE KEYS */;
-INSERT INTO `comentarios` VALUES (1,1,4,'arara linda','2025-06-11 20:35:47'),(3,1,1,'gatinho bonito','2025-06-12 22:56:27');
+INSERT INTO `comentarios` VALUES (1,1,4,'arara linda','2025-06-11 20:35:47'),(3,1,1,'gatinho bonito','2025-06-12 22:56:27'),(5,1,12,'lobo bonito','2025-06-26 20:24:31');
 /*!40000 ALTER TABLE `comentarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +114,7 @@ CREATE TABLE `curtidas` (
   KEY `foto_id` (`foto_id`),
   CONSTRAINT `curtidas_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   CONSTRAINT `curtidas_ibfk_2` FOREIGN KEY (`foto_id`) REFERENCES `fotos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `curtidas` (
 
 LOCK TABLES `curtidas` WRITE;
 /*!40000 ALTER TABLE `curtidas` DISABLE KEYS */;
-INSERT INTO `curtidas` VALUES (94,1,1,'2025-06-16 01:12:05'),(95,1,3,'2025-06-16 01:12:06'),(96,1,6,'2025-06-16 01:12:07'),(98,1,7,'2025-06-16 01:12:09'),(99,1,4,'2025-06-16 01:12:09'),(100,1,5,'2025-06-20 18:54:52'),(101,1,14,'2025-06-22 16:40:48'),(102,1,15,'2025-06-22 16:40:48'),(103,1,16,'2025-06-22 16:40:49'),(104,1,13,'2025-06-22 16:40:51'),(105,1,12,'2025-06-22 16:40:51'),(106,1,11,'2025-06-22 16:40:52'),(107,1,10,'2025-06-22 16:40:54'),(108,1,9,'2025-06-22 16:40:54'),(110,1,8,'2025-06-22 16:40:57'),(111,5,19,'2025-06-22 17:27:46'),(112,5,18,'2025-06-22 17:27:47');
+INSERT INTO `curtidas` VALUES (94,1,1,'2025-06-16 01:12:05'),(95,1,3,'2025-06-16 01:12:06'),(96,1,6,'2025-06-16 01:12:07'),(98,1,7,'2025-06-16 01:12:09'),(99,1,4,'2025-06-16 01:12:09'),(100,1,5,'2025-06-20 18:54:52'),(111,5,19,'2025-06-22 17:27:46'),(112,5,18,'2025-06-22 17:27:47');
 /*!40000 ALTER TABLE `curtidas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,10 +141,11 @@ CREATE TABLE `fotos` (
   `descricao` text DEFAULT NULL,
   `url` varchar(255) NOT NULL,
   `data_upload` timestamp NOT NULL DEFAULT current_timestamp(),
+  `origem` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `fotos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +154,7 @@ CREATE TABLE `fotos` (
 
 LOCK TABLES `fotos` WRITE;
 /*!40000 ALTER TABLE `fotos` DISABLE KEYS */;
-INSERT INTO `fotos` VALUES (1,1,'Gato fofo','Um gato olhando curioso para a c?mera','/images/gato.jpg','2025-06-11 00:08:13'),(3,1,'Hamb?rguer gourmet','Com cheddar e bacon artesanal','/images/hamburguer.jpg','2025-06-11 00:08:13'),(4,1,'Arara Azul','Arara azul em galho de ?rvore tropical.','/images/arara.jpg','2025-06-11 00:11:57'),(5,1,'Tucano Colorido','Tucano com bico amarelo vibrante.','/images/tucano.jpg','2025-06-11 00:11:57'),(6,1,'Bal?o ao Amanhecer','Bal?o voando sobre colinas ao amanhecer.','/images/balao.jpg','2025-06-11 00:12:18'),(7,1,'Folha com Gotas','Folha verde com gotas de orvalho.','/images/folha.jpg','2025-06-11 00:12:18'),(8,1,'Lagarto Verde','Lagarto em uma rocha observando o ambiente.','/images/lagarto.jpg','2025-06-11 00:12:18'),(9,1,'Flor Amarela','Flor amarela sob a luz do sol.','/images/flor.jpg','2025-06-11 00:12:18'),(10,1,'Rio Tranquilo','Rio calmo entre ?rvores e pedras.','/images/rio.jpg','2025-06-11 00:12:18'),(11,1,'C?u Azul','C?u limpo com poucas nuvens brancas.','/images/ceu.jpg','2025-06-11 00:30:45'),(12,1,'Lobo na Neve','Lobo solit?rio observando ao longe.','/images/lobo.jpg','2025-06-11 00:30:45'),(13,1,'Bob Bonitinho','Um cachorro chamado Bob com olhar fofo.','/images/bob_bonitinho.jpg','2025-06-11 00:30:45'),(14,1,'Bob Descansando','Bob deitado em um gramado ao sol.','/images/bob.jpg','2025-06-11 00:30:45'),(15,1,'Sol Brilhando','Sol forte iluminando o c?u.','/images/sol.jpg','2025-06-11 00:30:45'),(16,1,'Girassol','Um girassol aberto acompanhando o sol.','/images/girassol.jpg','2025-06-11 00:30:45'),(17,1,'Teclado','Teclado de computador com ilumina??o RGB.','/images/teclado.jpg','2025-06-11 00:30:45'),(18,1,'Cachoeira','Queda d\'agua entre rochas e vegetacao.','/images/cachoeira.jpg','2025-06-11 00:35:29'),(19,1,'Paisagem Natural','Vista de campo, montanhas e ceu azul.','/images/paisagem.jpg','2025-06-11 00:35:29');
+INSERT INTO `fotos` VALUES (1,1,'Gato fofo','Um gato olhando curioso para a c?mera','/images/gato.jpg','2025-06-11 00:08:13',NULL),(3,1,'Hamb?rguer gourmet','Com cheddar e bacon artesanal','/images/hamburguer.jpg','2025-06-11 00:08:13',NULL),(4,1,'Arara Azul','Arara azul em galho de ?rvore tropical.','/images/arara.jpg','2025-06-11 00:11:57',NULL),(5,1,'Tucano Colorido','Tucano com bico amarelo vibrante.','/images/tucano.jpg','2025-06-11 00:11:57',NULL),(6,1,'Bal?o ao Amanhecer','Bal?o voando sobre colinas ao amanhecer.','/images/balao.jpg','2025-06-11 00:12:18',NULL),(7,1,'Folha com Gotas','Folha verde com gotas de orvalho.','/images/folha.jpg','2025-06-11 00:12:18',NULL),(8,1,'Lagarto Verde','Lagarto em uma rocha observando o ambiente.','/images/lagarto.jpg','2025-06-11 00:12:18',NULL),(9,1,'Flor Amarela','Flor amarela sob a luz do sol.','/images/flor.jpg','2025-06-11 00:12:18',NULL),(10,1,'Rio Tranquilo','Rio calmo entre ?rvores e pedras.','/images/rio.jpg','2025-06-11 00:12:18',NULL),(11,1,'C?u Azul','C?u limpo com poucas nuvens brancas.','/images/ceu.jpg','2025-06-11 00:30:45',NULL),(12,1,'Lobo na Neve','Lobo solit?rio observando ao longe.','/images/lobo.jpg','2025-06-11 00:30:45',NULL),(13,1,'Bob Bonitinho','Um cachorro chamado Bob com olhar fofo.','/images/bob_bonitinho.jpg','2025-06-11 00:30:45',NULL),(14,1,'Bob Descansando','Bob deitado em um gramado ao sol.','/images/bob.jpg','2025-06-11 00:30:45',NULL),(15,1,'Sol Brilhando','Sol forte iluminando o c?u.','/images/sol.jpg','2025-06-11 00:30:45',NULL),(16,1,'Girassol','Um girassol aberto acompanhando o sol.','/images/girassol.jpg','2025-06-11 00:30:45',NULL),(17,1,'Teclado','Teclado de computador com ilumina??o RGB.','/images/teclado.jpg','2025-06-11 00:30:45',NULL),(18,1,'Cachoeira','Queda d\'agua entre rochas e vegetacao.','/images/cachoeira.jpg','2025-06-11 00:35:29',NULL),(19,1,'Paisagem Natural','Vista de campo, montanhas e ceu azul.','/images/paisagem.jpg','2025-06-11 00:35:29',NULL),(26,1,'Hamburguer',NULL,'/uploads/1750969774670.jpg','2025-06-26 20:29:34','upload');
 /*!40000 ALTER TABLE `fotos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +174,7 @@ CREATE TABLE `fotos_categorias` (
   KEY `categoria_id` (`categoria_id`),
   CONSTRAINT `fotos_categorias_ibfk_1` FOREIGN KEY (`foto_id`) REFERENCES `fotos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fotos_categorias_ibfk_2` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,6 +183,7 @@ CREATE TABLE `fotos_categorias` (
 
 LOCK TABLES `fotos_categorias` WRITE;
 /*!40000 ALTER TABLE `fotos_categorias` DISABLE KEYS */;
+INSERT INTO `fotos_categorias` VALUES (4,26,6);
 /*!40000 ALTER TABLE `fotos_categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-22 15:15:31
+-- Dump completed on 2025-06-26 17:31:17

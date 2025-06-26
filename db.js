@@ -148,6 +148,37 @@ async function adicionarComentario(usuarioId, fotoId, texto) {
     `, [usuarioId, fotoId, texto]);
 }
 
+// === Funções para fotos do usuário ===
+async function adicionarFoto(usuarioId, titulo, descricao, url, origem = 'upload') {
+    const sql = 'INSERT INTO fotos (usuario_id, titulo, descricao, url, origem) VALUES (?, ?, ?, ?, ?)';
+    const [result] = await pool.query(sql, [usuarioId, titulo, descricao, url, origem]);
+    return result.insertId;
+}
+
+async function associarFotoCategoria(fotoId, categoriaId) {
+    const sql = 'INSERT INTO fotos_categorias (foto_id, categoria_id) VALUES (?, ?)';
+    await pool.query(sql, [fotoId, categoriaId]);
+}
+
+async function buscarFotosPorUsuario(usuarioId) {
+    const sql = 'SELECT id, titulo, url FROM fotos WHERE usuario_id = ? AND origem = "upload" ORDER BY data_upload DESC';
+    const [rows] = await pool.query(sql, [usuarioId]);
+    return rows;
+}
+
+// Buscar fotos do usuário por categoria
+async function buscarFotosPorUsuarioECategoria(usuarioId, categoriaId) {
+    const sql = `
+        SELECT f.id, f.titulo, f.url
+        FROM fotos f
+        JOIN fotos_categorias fc ON fc.foto_id = f.id
+        WHERE f.usuario_id = ? AND f.origem = 'upload' AND fc.categoria_id = ?
+        ORDER BY f.data_upload DESC
+    `;
+    const [rows] = await pool.query(sql, [usuarioId, categoriaId]);
+    return rows;
+}
+
 // Exportação das funções
 module.exports = {
     pool,
@@ -166,5 +197,9 @@ module.exports = {
     buscarFotosComFavoritos,
     buscarPinPorId,
     buscarComentariosPorFoto,
-    adicionarComentario
+    adicionarComentario,
+    adicionarFoto,
+    associarFotoCategoria,
+    buscarFotosPorUsuario,
+    buscarFotosPorUsuarioECategoria
 };

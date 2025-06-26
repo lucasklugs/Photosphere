@@ -130,4 +130,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Ativa os eventos nas imagens visíveis ao carregar a página
   ativarEventosModal();
+
+  // Mostrar select de categorias ao clicar na aba Criados
+  const tabCriados = document.getElementById('tab-criados');
+  const filtroCategorias = document.getElementById('filtro-categorias-criados');
+  const categoriaSelectJS = document.getElementById('categoriaSelectJS');
+  const gridCriados = document.getElementById('pins-criados');
+
+  if (tabCriados && filtroCategorias) {
+    tabCriados.addEventListener('click', () => {
+      filtroCategorias.hidden = false;
+    });
+  }
+
+  if (categoriaSelectJS && gridCriados) {
+    categoriaSelectJS.addEventListener('change', function () {
+      const selected = this.value;
+      document.querySelectorAll('#pins-criados .pin').forEach(pin => {
+        if (!selected || pin.dataset.categoriaId === selected) {
+          pin.style.display = '';
+        } else {
+          pin.style.display = 'none';
+        }
+      });
+    });
+  }
 });
