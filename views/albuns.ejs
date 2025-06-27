@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/albuns.css" />
+    <link rel="stylesheet" href="/styles/nav-footer.css" />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <main class="album-container">
+      <h1>Meus Álbuns</h1>
+      <ul class="album-list">
+        <% albuns.forEach(album => { %>
+        <li>
+          <a href="/albuns/<%= album.id %>">
+            <h2><%= album.nome %></h2>
+            <p>
+              Criado em: <%= new Date(album.data_criacao).toLocaleDateString()
+              %>
+            </p>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

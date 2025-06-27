@@ -1,41 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title><%= pin.titulo %> | Photosphere</title>
-  <link rel="stylesheet" href="/styles/pin.css" />
-  <link rel="stylesheet" href="/styles/nav-footer.css" />
-</head>
-<body>
-<%- include('partials/navbar') %>
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= pin.titulo %> | Photosphere</title>
+    <link rel="stylesheet" href="/styles/pin.css" />
+    <link rel="stylesheet" href="/styles/nav-footer.css" />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
 
-<main class="pin-container">
-  <div class="pin-left">
-    <img src="<%= pin.imagemUrl %>" alt="<%= pin.titulo %>" class="pin-img" />
-    <a href="/explorar" class="voltar-btn">❮</a>
-  </div>
+    <main class="pin-container">
+      <div class="pin-left">
+        <img
+          src="<%= pin.imagemUrl %>"
+          alt="<%= pin.titulo %>"
+          class="pin-img"
+        />
+        <a href="/explorar" class="voltar-btn">❮</a>
+        <!-- Botão Adicionar ao Album -->
+        <div class="adicionar-album">
+          <button id="addToAlbumBtn">Adicionar ao Album</button>
 
-  <div class="pin-right">
-    <div class="comentario-header">
-      <div class="avatar-circle">J</div>
-      <span class="username"><%= pin.autor %></span>
-    </div>
+          <div id="albumModal" class="modal" style="display: none">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>Adicionar ao Album</h2>
 
-    <div class="comentarios">
-      <% comentarios.forEach(c => { %>
-        <div class="comentario-item">
-          <strong><%= c.nome %>:</strong> <%= c.texto %>
+              <form action="/pin/<%= pin.id %>/adicionarAoAlbum" method="POST">
+                <label for="albumSelect">Selecione ou crie um album:</label>
+                <select
+                  name="albumId"
+                  id="albumSelect"
+                  onchange="toggleNovoAlbumInput()"
+                  required
+                >
+                  <option value="">Selecione um album</option>
+                  <% albuns.forEach(album => { %>
+                  <option value="<%= album.id %>"><%= album.nome %></option>
+                  <% }) %>
+                  <option value="novo">Criar novo album</option>
+                </select>
+
+                <input
+                  type="text"
+                  name="novoAlbum"
+                  id="novoAlbumInput"
+                  placeholder="Nome do novo album"
+                  style="display: none"
+                />
+
+                <button type="submit">Adicionar</button>
+              </form>
+            </div>
+          </div>
         </div>
-      <% }) %>
-    </div>
+      </div>
 
-    <form action="/pin/<%= pin.id %>/comentar" method="POST" class="comentario-form">
-      <input type="text" name="comentario" placeholder="Comentar..." required />
-      <button type="submit">Postar</button>
-    </form>
-  </div>
-</main>
+      <div class="pin-right">
+        <div class="comentario-header">
+          <div class="avatar-circle">J</div>
+          <span class="username"><%= pin.autor %></span>
+        </div>
 
-<%- include('partials/footer') %>
-</body>
+        <div class="comentarios">
+          <% comentarios.forEach(c => { %>
+          <div class="comentario-item">
+            <strong><%= c.nome %>:</strong> <%= c.texto %>
+          </div>
+          <% }) %>
+        </div>
+
+        <form
+          action="/pin/<%= pin.id %>/comentar"
+          method="POST"
+          class="comentario-form"
+        >
+          <input
+            type="text"
+            name="comentario"
+            placeholder="Comentar..."
+            required
+          />
+          <button type="submit">Postar</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      function toggleNovoAlbumInput() {
+        const albumSelect = document.getElementById("albumSelect");
+        const novoAlbumInput = document.getElementById("novoAlbumInput");
+        if (albumSelect.value === "novo") {
+          novoAlbumInput.style.display = "block";
+          novoAlbumInput.required = true;
+        } else {
+          novoAlbumInput.style.display = "none";
+          novoAlbumInput.required = false;
+        }
+      }
+      // Lógica para abrir/fechar o modal
+      const addToAlbumBtn = document.getElementById("addToAlbumBtn");
+      const albumModal = document.getElementById("albumModal");
+      const closeModal = document.querySelector(".modal .close");
+
+      addToAlbumBtn.addEventListener("click", () => {
+        albumModal.style.display = "block";
+      });
+
+      closeModal.addEventListener("click", () => {
+        albumModal.style.display = "none";
+      });
+
+      window.addEventListener("click", (event) => {
+        if (event.target === albumModal) {
+          albumModal.style.display = "none";
+        }
+      });
+    </script>
+    <%- include('partials/footer') %>
+  </body>
 </html>

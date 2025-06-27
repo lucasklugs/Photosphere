@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/album_detalhes.css" />
+    <link rel="stylesheet" href="/styles/nav-footer.css" />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <main class="album-details-container">
+      <h1>Detalhes do Álbum</h1>
+      <div class="foto-grid">
+        <% fotos.forEach(foto => { %>
+        <div class="foto-item">
+          <img src="<%= foto.url %>" alt="<%= foto.titulo %>" />
+          <p><%= foto.titulo || 'Sem título' %></p>
+        </div>
+        <% }) %>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

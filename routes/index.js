@@ -118,19 +118,35 @@ router.post('/upload', verificarLogin, upload.single('imagem'), async (req, res)
 });
 
 // Página de um pin específico - exige login
+// Página de um pin específico - exige login
 router.get('/pin/:id', verificarLogin, async (req, res) => {
-  const pinId = req.params.id;
-  const pin = await db.buscarPinPorId(pinId);
+  try {
+    const pinId = req.params.id;
+    const usuarioId = req.session.usuario.id;
 
-  if (!pin) return res.status(404).send('Pin não encontrado.');
+    // Buscar o pin
+    const pin = await db.buscarPinPorId(pinId);
+    if (!pin) return res.status(404).send('Pin não encontrado.');
 
-  const comentarios = await db.buscarComentariosPorFoto(pinId);
-  const sessUser = req.session.usuario;
-  const user = {
-    username: sessUser.nome,
-    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
-  };
-  res.render('pin', { pin, comentarios, user });
+    // Buscar os comentários do pin
+    const comentarios = await db.buscarComentariosPorFoto(pinId);
+
+    // Buscar álbuns do usuário logado
+    const albuns = await db.buscarAlbunsPorUsuario(usuarioId);
+
+    // Dados do usuário logado
+    const sessUser = req.session.usuario;
+    const user = {
+      username: sessUser.nome,
+      avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
+    };
+
+    // Renderizar a página do pin, passando os álbuns
+    res.render('pin', { pin, comentarios, albuns, user });
+  } catch (err) {
+    console.error('Erro ao renderizar o pin:', err);
+    res.status(500).send('Erro interno no servidor.');
+  }
 });
 
 // Enviar comentário para pin - exige login
@@ -376,6 +392,79 @@ router.post('/favoritar', verificarLogin, async (req, res) => {
   } catch (err) {
     console.error('Erro ao alternar curtida:', err);
     res.status(500).json({ erro: 'Erro interno' });
+  }
+});
+
+// Albuns
+// Criar ou adicionar ao álbum
+router.post('/pin/:id/adicionarAoAlbum', verificarLogin, async (req, res) => {
+  const { albumId, novoAlbum } = req.body;
+  const usuarioId = req.session.usuario.id;
+  const pinId = req.params.id;
+
+  try {
+    // Verificar se novo álbum está sendo criado sem nome válido
+    if (albumId === 'novo' && (!novoAlbum || novoAlbum.trim() === '')) {
+      return res.status(400).send('Nome do novo álbum é obrigatório.');
+    }
+
+    let albumIdUsado;
+
+    if (albumId === 'novo') {
+      // Criar novo álbum
+      albumIdUsado = await db.criarAlbum(usuarioId, novoAlbum.trim());
+    } else if (!albumId || isNaN(albumId)) {
+      // Validar que um álbum existente foi selecionado
+      return res.status(400).send('Álbum inválido selecionado.');
+    } else {
+      // Usar álbum existente
+      albumIdUsado = albumId;
+    }
+
+    // Adicionar foto ao álbum
+    await db.adicionarFotoAoAlbum(albumIdUsado, pinId);
+
+    // Redirecionar para o pin com mensagem de sucesso
+    res.redirect(`/pin/${pinId}`);
+  } catch (err) {
+    console.error('Erro ao adicionar ao álbum:', err);
+    res.status(500).send('Erro ao adicionar ao álbum.');
+  }
+});
+
+// Página para visualizar os álbuns
+router.get('/albuns', verificarLogin, async (req, res) => {
+  const usuarioId = req.session.usuario.id;
+  const usuarioSessao = req.session.usuario;
+
+  try {
+    const albuns = await db.buscarAlbunsPorUsuario(usuarioId);
+    const user = {
+      username: usuarioSessao.nome,
+      avatar: usuarioSessao.foto_perfil || '/images/placeholder-avatar.png'
+    };
+    res.render('albuns', { title: 'Meus Álbuns', albuns, user });
+  } catch (err) {
+    console.error('Erro ao buscar álbuns:', err);
+    res.status(500).send('Erro ao buscar álbuns');
+  }
+});
+
+// Página de um álbum específico
+router.get('/albuns/:id', verificarLogin, async (req, res) => {
+  const albumId = req.params.id;
+  const usuarioSessao = req.session.usuario;
+
+  try {
+    const fotos = await db.buscarFotosPorAlbum(albumId);
+    const user = {
+      username: usuarioSessao.nome,
+      avatar: usuarioSessao.foto_perfil || '/images/placeholder-avatar.png'
+    };
+    res.render('album_detalhes', { title: 'Detalhes do Álbum', fotos, user });
+  } catch (err) {
+    console.error('Erro ao buscar fotos do álbum:', err);
+    res.status(500).send('Erro ao buscar fotos do álbum');
   }
 });
 

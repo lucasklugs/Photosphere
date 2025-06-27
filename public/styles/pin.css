@@ -1,9 +1,10 @@
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body > .upload-container {
@@ -24,19 +25,18 @@ footer {
   flex-wrap: wrap;
 }
 
-/* Botão voltar no canto da imagem (substituindo like-btn) */
 .voltar-btn {
   position: absolute;
   top: 10px;
   left: 10px;
   display: inline-block;
   padding: 6px 12px;
-  background-color: #2E6EA6;
+  background-color: #2e6ea6;
   color: white;
   border-radius: 20px;
   font-size: 0.9rem;
   text-decoration: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s;
   z-index: 2;
 }
@@ -61,7 +61,7 @@ footer {
   width: 100%;
   max-width: 300px;
   background: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .comentario-header {
@@ -112,13 +112,43 @@ footer {
   padding: 8px 16px;
   border-radius: 20px;
   border: none;
-  background: #2E6EA6;
+  background: #2e6ea6;
   color: white;
   cursor: pointer;
 }
 
 .comentario-form button:hover {
   background-color: #5a8bb7;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 /* Responsividade */

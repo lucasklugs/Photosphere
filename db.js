@@ -118,6 +118,41 @@ async function buscarFotosComFavoritos(usuarioId) {
     return rows;
 }
 
+// === Funções para albuns ===
+async function criarAlbum(usuarioId, nome) {
+  const [result] = await pool.execute(
+    'INSERT INTO albuns (usuario_id, nome) VALUES (?, ?)',
+    [usuarioId, nome]
+  );
+  return result.insertId;
+}
+
+async function adicionarFotoAoAlbum(albumId, fotoId) {
+  await pool.execute(
+    'INSERT INTO album_fotos (album_id, foto_id) VALUES (?, ?)',
+    [albumId, fotoId]
+  );
+}
+
+async function buscarAlbunsPorUsuario(usuarioId) {
+  const [albuns] = await pool.execute(
+    'SELECT * FROM albuns WHERE usuario_id = ? ORDER BY data_criacao DESC',
+    [usuarioId]
+  );
+  return albuns;
+}
+
+async function buscarFotosPorAlbum(albumId) {
+  const [fotos] = await pool.execute(
+    `SELECT f.* 
+     FROM album_fotos af 
+     JOIN fotos f ON af.foto_id = f.id 
+     WHERE af.album_id = ?`,
+    [albumId]
+  );
+  return fotos;
+}
+
 // === Funções para pins ===
 async function buscarPinPorId(pinId) {
     const [rows] = await pool.query(`
@@ -201,5 +236,9 @@ module.exports = {
     adicionarFoto,
     associarFotoCategoria,
     buscarFotosPorUsuario,
-    buscarFotosPorUsuarioECategoria
+    buscarFotosPorUsuarioECategoria,
+    criarAlbum,
+    adicionarFotoAoAlbum,
+    buscarAlbunsPorUsuario,
+    buscarFotosPorAlbum
 };
