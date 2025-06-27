@@ -6,20 +6,30 @@
     <link rel="stylesheet" href="/styles/album_detalhes.css" />
     <link rel="stylesheet" href="/styles/nav-footer.css" />
   </head>
-  <body>
-    <%- include('partials/navbar') %>
+<body>
+  <%- include('partials/navbar', { user: user }) %>
 
-    <main class="album-details-container">
-      <h1>Detalhes do Álbum</h1>
-      <div class="foto-grid">
+  <main class="album-details-container">
+    <h1><%= albumNome %></h1>
+
+    <% if (fotos.length === 0) { %>
+      <p>Este álbum está vazio.</p>
+    <% } else { %>
+      <div class="fotos-grid">
         <% fotos.forEach(foto => { %>
-        <div class="foto-item">
-          <img src="<%= foto.url %>" alt="<%= foto.titulo %>" />
-          <p><%= foto.titulo || 'Sem título' %></p>
-        </div>
+          <div class="foto-card">
+            <img src="<%= foto.url %>" alt="<%= foto.titulo %>" class="foto-img" />
+            <h3><%= foto.titulo %></h3>
+            <p><%= foto.descricao %></p>
+
+            <form method="POST" action="/albuns/<%= albumId %>/removeFoto/<%= foto.id %>">
+              <button type="submit" class="btn-remover">Remover do Álbum</button>
+            </form>
+          </div>
         <% }) %>
       </div>
-    </main>
+    <% } %>
+  </main>
 
     <%- include('partials/footer') %>
   </body>

@@ -1,0 +1,105 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Layout principal */
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Faz o conteúdo principal ocupar o espaço restante da tela */
+main.album-container {
+  flex: 1;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Título */
+.album-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Lista de álbuns */
+.album-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Item individual */
+.album-list li {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Link do álbum */
+.album-list li a {
+  display: block;
+  text-decoration: none;
+  color: #333;
+  padding: 1rem;
+  height: 100%;
+}
+
+/* Título do álbum */
+.album-list h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Data */
+.album-list p {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Hover */
+.album-list li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulário de deletar álbum */
+.delete-form {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  z-index: 2;
+}
+
+/* Botão "X" */
+.delete-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #c0392b;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #e74c3c;
+}
+
+.album-list li {
+  position: relative;
+}

@@ -14,6 +14,19 @@
       <ul class="album-list">
         <% albuns.forEach(album => { %>
         <li>
+          <!-- Botão de deletar -->
+          <form
+            method="POST"
+            action="/albuns/<%= album.id %>?_method=DELETE"
+            class="delete-form"
+            onsubmit="return confirm('Tem certeza que deseja deletar este álbum?');"
+          >
+            <button type="submit" class="delete-btn" title="Deletar álbum">
+              ×
+            </button>
+          </form>
+
+          <!-- Link do álbum -->
           <a href="/albuns/<%= album.id %>">
             <h2><%= album.nome %></h2>
             <p>

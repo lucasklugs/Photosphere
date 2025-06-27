@@ -153,6 +153,10 @@ async function buscarFotosPorAlbum(albumId) {
   return fotos;
 }
 
+async function removerFotoDoAlbum(albumId, fotoId) {
+  await pool.execute('DELETE FROM album_fotos WHERE album_id = ? AND foto_id = ?', [albumId, fotoId]);
+}
+
 // === Funções para pins ===
 async function buscarPinPorId(pinId) {
     const [rows] = await pool.query(`
@@ -240,5 +244,6 @@ module.exports = {
     criarAlbum,
     adicionarFotoAoAlbum,
     buscarAlbunsPorUsuario,
-    buscarFotosPorAlbum
+    buscarFotosPorAlbum,
+    removerFotoDoAlbum
 };

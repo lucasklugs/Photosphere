@@ -456,15 +456,59 @@ router.get('/albuns/:id', verificarLogin, async (req, res) => {
   const usuarioSessao = req.session.usuario;
 
   try {
+    // Buscar as fotos do álbum
     const fotos = await db.buscarFotosPorAlbum(albumId);
+
+    // Buscar nome do álbum
+    const [albumInfo] = await db.pool.execute('SELECT nome FROM albuns WHERE id = ?', [albumId]);
+    const albumNome = albumInfo.length > 0 ? albumInfo[0].nome : 'Álbum';
+
     const user = {
       username: usuarioSessao.nome,
       avatar: usuarioSessao.foto_perfil || '/images/placeholder-avatar.png'
     };
-    res.render('album_detalhes', { title: 'Detalhes do Álbum', fotos, user });
+
+    res.render('album_detalhes', { title: 'Detalhes do Álbum', fotos, albumNome, albumId, user });
   } catch (err) {
     console.error('Erro ao buscar fotos do álbum:', err);
     res.status(500).send('Erro ao buscar fotos do álbum');
+  }
+});
+
+router.post('/albuns/:albumId/removeFoto/:fotoId', verificarLogin, async (req, res) => {
+  const { albumId, fotoId } = req.params;
+  try {
+    await db.removerFotoDoAlbum(albumId, fotoId);
+    res.redirect(`/albuns/${albumId}`);
+  } catch (err) {
+    console.error('Erro ao remover foto do álbum:', err);
+    res.status(500).send('Erro ao remover foto do álbum');
+  }
+});
+
+// Deletar um álbum
+router.delete('/albuns/:id', verificarLogin, async (req, res) => {
+  const albumId = req.params.id;
+  const usuarioId = req.session.usuario.id;
+
+  try {
+    // Verifica se o álbum pertence ao usuário
+    const [result] = await pool.query('SELECT id FROM albuns WHERE id = ? AND usuario_id = ?', [albumId, usuarioId]);
+
+    if (result.length === 0) {
+      return res.status(403).send('Álbum não encontrado ou não autorizado.');
+    }
+
+    // Remove as associações com fotos primeiro
+    await pool.query('DELETE FROM album_fotos WHERE album_id = ?', [albumId]);
+
+    // Agora remove o álbum em si
+    await pool.query('DELETE FROM albuns WHERE id = ?', [albumId]);
+
+    res.redirect('/albuns');
+  } catch (err) {
+    console.error('Erro ao deletar álbum:', err);
+    res.status(500).send('Erro ao deletar álbum');
   }
 });
 
