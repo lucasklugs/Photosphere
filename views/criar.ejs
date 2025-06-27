@@ -16,10 +16,21 @@
         class="upload-form"
       >
         <div class="upload-left">
-          <label for="imagem" class="upload-area">
-            <input type="file" id="imagem" name="imagem" hidden />
-            <div class="upload-icon">⬆</div>
-            <p>Faça o upload ou arraste o <br>arquivo e solte aqui</p>
+          <label for="imagem" class="upload-area" style="cursor: pointer">
+            <input
+              type="file"
+              id="imagem"
+              name="imagem"
+              hidden
+              onchange="previewImage(event)"
+              accept="image/*"
+              required
+            />
+            <div class="upload-content">
+              <div class="upload-icon">⬆</div>
+              <p>Faça o upload ou arraste o <br />arquivo e solte aqui</p>
+            </div>
+            <div class="preview-container"></div>
           </label>
         </div>
         <div class="upload-right">
@@ -40,5 +51,25 @@
       </form>
     </div>
     <%- include('partials/footer') %>
+
+    <script>
+      function previewImage(event) {
+        const file = event.target.files[0];
+        const uploadArea = document.querySelector(".upload-area");
+        const previewContainer = uploadArea.querySelector(".preview-container");
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            previewContainer.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização" />`;
+            uploadArea.classList.add("uploaded");
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewContainer.innerHTML = "";
+          uploadArea.classList.remove("uploaded");
+        }
+      }
+    </script>
   </body>
 </html>

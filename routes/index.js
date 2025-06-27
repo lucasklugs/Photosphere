@@ -96,12 +96,15 @@ router.get('/criar', verificarLogin, async (req, res) => {
 
 // Upload de imagem - exige login
 router.post('/upload', verificarLogin, upload.single('imagem'), async (req, res) => {
+    console.log('req.file:', req.file);
+      if (!req.file) {
+    return res.status(400).send('Nenhum arquivo foi enviado.');
+  }
   try {
     const sessUser = req.session.usuario;
     const { titulo, descricao, categoria } = req.body;
     const imageUrl = '/uploads/' + req.file.filename;
 
-    // Salvar no banco com origem 'upload' e obter o id da foto
     const fotoId = await db.adicionarFoto(sessUser.id, titulo, descricao, imageUrl, 'upload');
 
     // Associar foto à categoria selecionada
@@ -117,7 +120,6 @@ router.post('/upload', verificarLogin, upload.single('imagem'), async (req, res)
   }
 });
 
-// Página de um pin específico - exige login
 // Página de um pin específico - exige login
 router.get('/pin/:id', verificarLogin, async (req, res) => {
   try {

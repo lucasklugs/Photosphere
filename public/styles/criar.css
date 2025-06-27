@@ -4,11 +4,12 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body > .upload-container {
@@ -64,6 +65,14 @@ footer {
   padding: 20px;
 }
 
+.upload-area img {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  margin: auto;
+}
+
 .upload-area:hover {
   background-color: #b8c4d1;
 }
@@ -96,7 +105,7 @@ footer {
 }
 
 .upload-right button {
-  background: #2E6EA6;
+  background: #2e6ea6;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -115,7 +124,8 @@ footer {
     padding: 24px;
   }
 
-  .upload-left, .upload-right {
+  .upload-left,
+  .upload-right {
     width: 100%;
     max-width: 100%;
   }
@@ -151,4 +161,12 @@ footer {
   .upload-form {
     padding: 16px;
   }
+}
+
+.upload-area.uploaded {
+  background-color: white !important;
+}
+
+.upload-area.uploaded .upload-content {
+  display: none !important;
 }
