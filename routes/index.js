@@ -85,7 +85,7 @@ router.get('/criar', verificarLogin, async (req, res) => {
 
   const user = {
     username: sessUser.nome,
-    avatar: '/images/placeholder-avatar.png'
+    avatar: sessUser.foto_perfil || '/images/placeholder-avatar.png'
   };
 
   // Buscar categorias do banco
