@@ -283,3 +283,16 @@ body {
         cursor: pointer;
     }
 }
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .login-container, .login-form {
+    padding: 1rem 0.5rem;
+    width: 100vw;
+    max-width: 99vw;
+  }
+  .login-form input, .login-form button {
+    font-size: 15px;
+    width: 100%;
+  }
+}

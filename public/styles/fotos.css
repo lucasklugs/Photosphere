@@ -113,6 +113,26 @@ main {
   transform: scale(0.95);
 }
 
+/* Responsividade */
+@media (max-width: 600px) {
+  .photo-grid, .photo-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .photo-item img {
+    width: 100%;
+    height: auto;
+  }
+  .photo-details {
+    font-size: 15px;
+  }
+}
+@media (max-width: 400px) {
+  .photo-grid, .photo-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .menu-centralizado ul {
     flex-direction: column;

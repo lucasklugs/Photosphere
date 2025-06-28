@@ -164,3 +164,25 @@ main {
     gap: 10px;
   }
 }
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .dashboard-header button {
+    width: 100%;
+    font-size: 15px;
+    padding: 6px 0;
+  }
+  .dashboard-content, .dashboard-table {
+    overflow-x: auto;
+    font-size: 15px;
+  }
+}

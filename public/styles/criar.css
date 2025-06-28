@@ -142,6 +142,21 @@ footer {
     font-size: 1rem;
   }
 }
+/* Responsividade */
+@media (max-width: 600px) {
+  .criar-container,
+  .criar-form {
+    padding: 1rem 0.5rem;
+    width: 100vw;
+    max-width: 99vw;
+  }
+
+  .criar-form input,
+  .criar-form button {
+    font-size: 15px;
+    width: 100%;
+  }
+}
 
 @media (max-width: 480px) {
   .upload-area {

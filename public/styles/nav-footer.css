@@ -212,3 +212,17 @@
     order: 2;
   }
 }
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .nav-footer {
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    padding: 10px 0;
+  }
+  .nav-footer a, .nav-footer button {
+    width: 100%;
+    text-align: center;
+  }
+}

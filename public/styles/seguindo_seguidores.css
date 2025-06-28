@@ -12,10 +12,6 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-.footer {
-  margin-top: auto;
-}
-
 .seguidores-container {
   max-width: 900px;
   margin: 0 auto;
@@ -116,4 +112,16 @@ body {
 
 .usuario-card .btn:hover {
   opacity: 0.9;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .seguindo-list, .seguidores-list {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .seguindo-item, .seguidores-item {
+    width: 100%;
+    font-size: 15px;
+  }
 }

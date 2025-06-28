@@ -247,3 +247,37 @@ button.menu {
   color: #222;
   transition: border 0.2s;
 }
+
+/* Responsividade */
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+  main, .container, .content {
+    padding: 2rem 0.5rem 1rem;
+    max-width: 100vw;
+  }
+  .profile-header, .profile-info, .profile-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-details {
+    font-size: 15px;
+  }
+  .profile-actions button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+  }
+}

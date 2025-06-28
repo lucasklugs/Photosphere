@@ -133,3 +133,16 @@ main {
     padding: 24px 16px;
   }
 }
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .config-container, .config-form {
+    padding: 1rem 0.5rem;
+    width: 100vw;
+    max-width: 99vw;
+  }
+  .config-form input, .config-form button {
+    font-size: 15px;
+    width: 100%;
+  }
+}
