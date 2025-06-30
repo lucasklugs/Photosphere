@@ -215,8 +215,10 @@ button.menu {
   line-height: 1;
 }
 
-#modal-close:focus {
-  outline: 2px solid #0073e6;
+#modal-close:hover{
+  color: #474747;
+  transform: scale(1.25);
+  transition: transform 0.2s, color 0.2s;
 }
 
 [hidden] {
