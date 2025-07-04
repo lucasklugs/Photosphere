@@ -24,8 +24,30 @@
     </div>
   </header>
 
-  <main>
-    <div class="photo-grid" id="photo-grid"></div>
+ <main class="main-content">
+  <div class="header-text">
+    <h1>Gerenciar Fotos</h1>
+  </div>
+
+  <div class="photo-grid">
+    <% fotos.forEach(foto => { %>
+      <div class="photo-card">
+        <div class="photo-content" style="background-image: url('<%= foto.url %>')">
+  <div class="overlay">
+    <form method="POST" action="/admin/fotos/<%= foto.id %>/excluir" onsubmit="return confirm('Tem certeza que deseja excluir esta foto?');">
+      <button class="x-btn"><img src="/images/trash.png" alt="Excluir"></button>
+    </form>
+  </div>
+</div>
+        <div class="info">
+          <h3><%= foto.titulo %></h3>
+          <p><%= foto.descricao %></p>
+          <small><%= foto.categorias || 'Sem categoria' %></small>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</main>
   </main>
   <script src="/javascripts/fotos.js"></script>
 

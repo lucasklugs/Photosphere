@@ -11,7 +11,9 @@ const {
   buscarCategorias,
   excluirCategoria,
   adicionarCategoria,
-  atualizarCategoria
+  atualizarCategoria,
+  buscarTodasFotosComCategorias,
+  excluirFoto
 } = require('../db');
 
 // Middleware para validar sessão de admin
@@ -146,14 +148,26 @@ router.post('/categorias/editar/:id', async (req, res) => {
 // Página fotos
 router.get('/fotos', verificarSessaoAdmin, async (req, res) => {
   try {
-    const usuarios = await buscarUsuarios();
+    const fotos = await buscarTodasFotosComCategorias(); 
     res.render('admin/fotos', {
-      admNome: req.session.admnome,
-      usuarios
+      title: 'Admin - Fotos',
+      fotos,
+      admNome: req.session.admnome || 'Administrador'
     });
   } catch (err) {
-    console.error('Erro ao carregar fotos:', err);
-    res.status(500).send('Erro interno no servidor.');
+    console.error('Erro ao buscar fotos:', err);
+    res.status(500).send('Erro ao carregar fotos');
+  }
+});
+
+router.post('/fotos/:id/excluir', async (req, res) => {
+  try {
+    const fotoId = req.params.id;
+    await excluirFoto(fotoId);
+    res.redirect('/admin/fotos');
+  } catch (err) {
+    console.error('Erro ao excluir foto:', err);
+    res.status(500).send('Erro ao excluir foto');
   }
 });
 

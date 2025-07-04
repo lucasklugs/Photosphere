@@ -218,6 +218,29 @@ async function buscarFotosPorUsuarioECategoria(usuarioId, categoriaId) {
     return rows;
 }
 
+async function buscarTodasFotosComCategorias() {
+  const [rows] = await pool.query(`
+    SELECT 
+      f.id, f.titulo, f.descricao, f.url,
+      GROUP_CONCAT(c.nome SEPARATOR ', ') AS categorias
+    FROM fotos f
+    LEFT JOIN fotos_categorias fc ON f.id = fc.foto_id
+    LEFT JOIN categorias c ON fc.categoria_id = c.id
+    GROUP BY f.id
+    ORDER BY f.data_upload DESC
+  `);
+  return rows;
+}
+
+async function excluirFoto(fotoId) {
+  // Excluir primeiro os vínculos com categorias, curtidas e álbuns se houver
+  await pool.query('DELETE FROM fotos_categorias WHERE foto_id = ?', [fotoId]);
+  await pool.query('DELETE FROM curtidas WHERE foto_id = ?', [fotoId]);
+  await pool.query('DELETE FROM album_fotos WHERE foto_id = ?', [fotoId]);
+  await pool.query('DELETE FROM comentarios WHERE foto_id = ?', [fotoId]);
+  await pool.query('DELETE FROM fotos WHERE id = ?', [fotoId]);
+}
+
 // Exportação das funções
 module.exports = {
     pool,
@@ -245,5 +268,7 @@ module.exports = {
     adicionarFotoAoAlbum,
     buscarAlbunsPorUsuario,
     buscarFotosPorAlbum,
-    removerFotoDoAlbum
+    removerFotoDoAlbum,
+    buscarTodasFotosComCategorias,
+    excluirFoto
 };
